@@ -6,6 +6,7 @@ import msal
 import shutil
 import time
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from calendar import monthrange
 from datetime import date, datetime, timedelta, timezone
@@ -313,6 +314,26 @@ def extract_gmail_body_text(message):
         return clean_email_text("\n".join(html_parts))
 
     return ""
+
+
+def validated_mypage_url(value):
+    """表示先に使う企業URLを、HTTP(S)のURLだけに限定する。"""
+    value = (value or "").strip()
+    if not value:
+        return ""
+    if len(value) > 2048 or any(ord(ch) < 32 or ord(ch) == 127 for ch in value):
+        return None
+    try:
+        parsed = urlsplit(value)
+        host = parsed.hostname
+        port = parsed.port  # 不正なポート表現も検出
+    except ValueError:
+        return None
+    if parsed.scheme.lower() not in {"https", "http"} or not host:
+        return None
+    if parsed.username is not None or parsed.password is not None:
+        return None
+    return value
 
 
 # =========================================================
@@ -2091,6 +2112,23 @@ def prepare_portfolio_demo():
             except OSError:
                 pass
 
+    # 公開デモの更新リクエストは、デモサイト自身からのフォーム操作だけを許可。
+    # 本番サービスには、さらにCSRFトークンによる保護を導入すること。
+    if request.method not in {"GET", "HEAD", "OPTIONS"}:
+        origin = request.headers.get("Origin", "")
+        try:
+            parsed_origin = urlsplit(origin)
+        except ValueError:
+            abort(403)
+        if (
+            not origin
+            or parsed_origin.netloc.lower() != request.host.lower()
+            or parsed_origin.scheme not in ({"http", "https"} if os.environ.get("INTERNTRACK_DEMO_LOCAL") == "1" else {"https"})
+            or parsed_origin.username is not None
+            or parsed_origin.password is not None
+        ):
+            abort(403)
+
     # デモでは外部メール接続・会員登録・パスワード変更を公開しない。
     blocked = {"register", "login", "logout", "account",
                "google_connect", "google_oauth_callback", "outlook_connect",
@@ -3618,10 +3656,7 @@ def add_company():
             "",
         ).strip()
 
-        mypage_url = request.form.get(
-            "mypage_url",
-            "",
-        ).strip()
+        mypage_url = validated_mypage_url(request.form.get("mypage_url", ""))
 
         memo = request.form.get(
             "memo",
@@ -3633,6 +3668,9 @@ def add_company():
 
         elif not status:
             error = "選考状況を選択してください。"
+
+        elif mypage_url is None:
+            error = "マイページURLはhttp://またはhttps://で始まる正しいURLを指定してください。"
 
         else:
             connection = get_db_connection()
@@ -3794,10 +3832,7 @@ def edit_company(company_id):
             "",
         ).strip()
 
-        mypage_url = request.form.get(
-            "mypage_url",
-            "",
-        ).strip()
+        mypage_url = validated_mypage_url(request.form.get("mypage_url", ""))
 
         memo = request.form.get(
             "memo",
@@ -3809,6 +3844,9 @@ def edit_company(company_id):
 
         elif not status:
             error = "選考状況を選択してください。"
+
+        elif mypage_url is None:
+            error = "マイページURLはhttp://またはhttps://で始まる正しいURLを指定してください。"
 
         else:
             connection.execute(
