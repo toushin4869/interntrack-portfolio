@@ -1,0 +1,29 @@
+# Environment variables and secrets
+.env
+.env.*
+google_oauth_client.json
+client_secret*.json
+*.pem
+*.key
+
+# Databases and personal data
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Local development files
+.vscode/
+.idea/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
