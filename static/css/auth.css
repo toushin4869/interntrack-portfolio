@@ -1,0 +1,821 @@
+.auth-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 32px 18px;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #e0e7ff,
+            transparent 35%
+        ),
+        #f8fafc;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans JP",
+        sans-serif;
+}
+
+
+.auth-card {
+    width: min(100%, 460px);
+    box-sizing: border-box;
+    padding: 34px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 24px 60px
+        rgba(15, 23, 42, 0.10);
+}
+
+
+.auth-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 28px;
+
+    color: #111827;
+    text-decoration: none;
+}
+
+
+.auth-brand-icon {
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    width: 46px;
+    height: 46px;
+
+    border-radius: 14px;
+
+    background: #111827;
+    color: #ffffff;
+
+    font-weight: 900;
+}
+
+
+.auth-brand-text {
+    display: block;
+}
+
+
+.auth-brand-text strong {
+    display: block;
+
+    color: #111827;
+
+    font-size: 20px;
+    line-height: 1.25;
+}
+
+
+.auth-brand-text > span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+.auth-label {
+    margin: 0 0 7px;
+
+    color: #64748b;
+
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+}
+
+
+.auth-card h1 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 30px;
+}
+
+
+.auth-description {
+    margin: 10px 0 25px;
+
+    color: #64748b;
+
+    line-height: 1.7;
+}
+
+
+.auth-error {
+    margin-bottom: 18px;
+    padding: 13px 14px;
+
+    border: 1px solid #fecaca;
+    border-radius: 11px;
+
+    background: #fef2f2;
+    color: #b91c1c;
+
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+
+.auth-form {
+    display: grid;
+    gap: 18px;
+}
+
+
+.auth-field {
+    display: grid;
+    gap: 7px;
+}
+
+
+.auth-field label {
+    color: #1f2937;
+
+    font-weight: 800;
+}
+
+
+.auth-field input {
+    width: 100%;
+    min-height: 47px;
+    box-sizing: border-box;
+
+    padding: 11px 13px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 11px;
+
+    background: #ffffff;
+    color: #111827;
+
+    font: inherit;
+}
+
+
+.auth-field input:focus {
+    border-color: #3b82f6;
+
+    outline:
+        3px solid
+        rgba(59, 130, 246, 0.13);
+}
+
+
+.password-input-wrapper {
+    position: relative;
+}
+
+
+.password-input-wrapper input {
+    padding-right: 52px;
+}
+
+
+.password-toggle-button {
+    position: absolute;
+    top: 50%;
+    right: 7px;
+
+    display: grid;
+    place-items: center;
+
+    width: 39px;
+    height: 36px;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: transparent;
+    color: #64748b;
+
+    cursor: pointer;
+
+    transform: translateY(-50%);
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        opacity 0.15s ease;
+}
+
+
+.password-toggle-button:hover {
+    background: #f1f5f9;
+    color: #111827;
+}
+
+
+.password-toggle-button:focus-visible {
+    outline:
+        3px solid
+        rgba(59, 130, 246, 0.20);
+}
+
+
+.password-toggle-button .eye-icon {
+    display: block;
+
+    font-size: 18px;
+    line-height: 1;
+
+    opacity: 0.55;
+}
+
+
+.password-toggle-button.is-visible .eye-icon {
+    opacity: 1;
+}
+
+
+.password-toggle-button.is-visible::after {
+    position: absolute;
+
+    width: 22px;
+    height: 2px;
+
+    border-radius: 999px;
+
+    background: currentColor;
+
+    content: "";
+
+    transform: rotate(-45deg);
+}
+
+
+.auth-submit {
+    min-height: 49px;
+    margin-top: 4px;
+    padding: 11px 18px;
+
+    border: 0;
+    border-radius: 11px;
+
+    background: #111827;
+    color: #ffffff;
+
+    font: inherit;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.auth-submit:hover {
+    background: #1f2937;
+}
+
+
+.auth-submit:active {
+    transform: translateY(1px);
+}
+
+
+.auth-switch {
+    margin: 22px 0 0;
+
+    color: #64748b;
+
+    text-align: center;
+    line-height: 1.6;
+}
+
+
+.auth-switch a {
+    color: #1d4ed8;
+
+    font-weight: 800;
+}
+
+
+.account-page {
+    width: min(760px, calc(100% - 36px));
+    margin: 55px auto;
+}
+
+
+.account-card {
+    padding: 30px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 22px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 16px 40px
+        rgba(15, 23, 42, 0.07);
+}
+
+
+.account-card h1 {
+    margin-top: 0;
+}
+
+
+.account-row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 12px;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+.account-row span {
+    color: #64748b;
+
+    font-weight: 700;
+}
+
+
+.account-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 24px;
+}
+
+
+.account-back,
+.account-logout {
+    padding: 11px 16px;
+
+    border-radius: 10px;
+
+    font: inherit;
+    font-weight: 800;
+
+    text-decoration: none;
+}
+
+
+.account-back {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+
+.account-logout {
+    border: 0;
+
+    background: #111827;
+    color: #ffffff;
+
+    cursor: pointer;
+}
+
+
+@media (max-width: 560px) {
+
+    .auth-page {
+        display: block;
+
+        padding: 20px 14px;
+    }
+
+
+    .auth-card {
+        margin: 0 auto;
+        padding: 26px 20px;
+
+        border-radius: 20px;
+    }
+
+
+    .auth-card h1 {
+        font-size: 27px;
+    }
+
+
+    .account-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+
+}
+
+/* =========================================================
+   マイページ
+========================================================= */
+
+.account-body {
+    min-height: 100vh;
+    margin: 0;
+
+    background: #f8fafc;
+    color: #111827;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans JP",
+        sans-serif;
+}
+
+
+.account-page {
+    width: min(920px, calc(100% - 36px));
+    margin: 0 auto;
+    padding: 48px 0 80px;
+}
+
+
+.account-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+
+    margin-bottom: 28px;
+}
+
+
+.account-page-header h1 {
+    margin: 0;
+
+    font-size: 34px;
+    letter-spacing: -0.03em;
+}
+
+
+.account-page-description {
+    margin: 9px 0 0;
+
+    color: #64748b;
+
+    line-height: 1.7;
+}
+
+
+.account-home-link {
+    flex-shrink: 0;
+
+    padding: 11px 16px;
+
+    border: 1px solid #dbe3ee;
+    border-radius: 11px;
+
+    background: #ffffff;
+    color: #334155;
+
+    font-weight: 800;
+    text-decoration: none;
+
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+
+.account-home-link:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+}
+
+
+.account-message {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    font-weight: 800;
+    line-height: 1.6;
+}
+
+
+.account-message-error {
+    border: 1px solid #fecaca;
+
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+
+.account-message-success {
+    border: 1px solid #bbf7d0;
+
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+
+.account-card {
+    margin-bottom: 22px;
+    padding: 30px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 22px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 14px 40px
+        rgba(15, 23, 42, 0.06);
+}
+
+
+.account-section-header {
+    margin-bottom: 25px;
+}
+
+
+.account-section-label {
+    margin: 0 0 6px;
+
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+}
+
+
+.account-section-header h2 {
+    margin: 0;
+
+    font-size: 23px;
+}
+
+
+.account-section-header p:last-child {
+    margin: 8px 0 0;
+
+    color: #64748b;
+
+    line-height: 1.6;
+}
+
+
+.account-edit-form {
+    margin: 0;
+}
+
+
+.account-edit-content {
+    display: grid;
+    grid-template-columns:
+        minmax(180px, 0.8fr)
+        minmax(280px, 1.3fr);
+    gap: 36px;
+}
+
+
+.account-edit-information label {
+    color: #1e293b;
+
+    font-size: 16px;
+    font-weight: 900;
+}
+
+
+.account-edit-information p {
+    margin: 7px 0 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+.account-edit-control {
+    display: grid;
+    gap: 14px;
+}
+
+
+.account-edit-control > input,
+.account-form-field input {
+    width: 100%;
+    min-height: 47px;
+    box-sizing: border-box;
+
+    padding: 11px 13px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 11px;
+
+    background: #ffffff;
+    color: #111827;
+
+    font: inherit;
+}
+
+
+.account-edit-control > input:focus,
+.account-form-field input:focus {
+    border-color: #3b82f6;
+
+    outline:
+        3px solid
+        rgba(59, 130, 246, 0.13);
+}
+
+
+.account-password-field {
+    display: grid;
+    gap: 7px;
+}
+
+
+.account-password-field > label,
+.account-form-field > label {
+    color: #334155;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+
+.account-divider {
+    height: 1px;
+    margin: 28px 0;
+
+    background: #e2e8f0;
+}
+
+
+.account-save-button {
+    justify-self: flex-start;
+
+    min-height: 43px;
+    padding: 10px 17px;
+
+    border: 0;
+    border-radius: 10px;
+
+    background: #111827;
+    color: #ffffff;
+
+    font: inherit;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.account-save-button:hover {
+    background: #1f2937;
+}
+
+
+.account-save-button:active {
+    transform: translateY(1px);
+}
+
+
+.account-password-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 17px;
+}
+
+
+.account-form-field {
+    display: grid;
+    align-content: start;
+    gap: 7px;
+}
+
+
+.account-password-save {
+    grid-column: 1 / -1;
+
+    margin-top: 3px;
+}
+
+
+.account-information-row {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 18px;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+.account-information-row span {
+    color: #64748b;
+
+    font-weight: 700;
+}
+
+
+.account-information-row strong {
+    overflow-wrap: anywhere;
+}
+
+
+.account-logout-area {
+    margin-top: 25px;
+}
+
+
+.account-logout-button {
+    min-height: 43px;
+    padding: 10px 17px;
+
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #dc2626;
+
+    font: inherit;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease;
+}
+
+
+.account-logout-button:hover {
+    border-color: #fca5a5;
+    background: #fef2f2;
+}
+
+
+@media (max-width: 760px) {
+
+    .account-page {
+        width: min(100% - 28px, 920px);
+        padding-top: 28px;
+    }
+
+
+    .account-page-header {
+        display: grid;
+    }
+
+
+    .account-home-link {
+        justify-self: flex-start;
+    }
+
+
+    .account-card {
+        padding: 23px 19px;
+    }
+
+
+    .account-edit-content {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+
+    .account-password-form {
+        grid-template-columns: 1fr;
+    }
+
+
+    .account-information-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+
+}

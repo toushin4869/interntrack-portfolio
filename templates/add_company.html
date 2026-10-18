@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>企業を追加 | InternTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/common.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/add_company.css') }}"
+    >
+</head>
+
+<body>
+{% if demo_mode %}
+<div style="background:#173e60;color:#fff;padding:10px 18px;text-align:center;font-size:13px;line-height:1.6;position:relative;z-index:9999">
+  <strong>InternTrack ポートフォリオデモ</strong> — 企業名・予定はすべて架空です。データは訪問者ごとに分離され、一定期間後に消えます。実際の個人情報を入力しないでください。メール連携は無効です。
+</div>
+{% endif %}
+
+<header class="app-header">
+
+    <a href="/" class="brand">
+
+        <span class="brand-icon">
+            IT
+        </span>
+
+        <div class="brand-text">
+
+            <strong>
+                InternTrack
+            </strong>
+
+            <span>
+                就活管理アプリ
+            </span>
+
+        </div>
+
+    </a>
+
+    <nav class="main-nav">
+
+        <a href="/">
+            ホーム
+        </a>
+
+        <a href="/companies" class="active">
+            企業一覧
+        </a>
+
+        <a href="#">
+            カレンダー
+        </a>
+
+        <a href="#">
+            メール
+        </a>
+
+    </nav>
+
+    <a
+        href="/companies"
+        class="header-add-button"
+    >
+        ← 一覧へ戻る
+    </a>
+
+</header>
+
+<main class="add-company-page">
+
+    <div class="page-title">
+
+        <p class="welcome-label">
+            ADD COMPANY
+        </p>
+
+        <h1>
+            企業を追加
+        </h1>
+
+        <p>
+            応募企業の情報を登録します。
+        </p>
+
+    </div>
+
+    {% if error %}
+
+        <div class="form-error">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+    <form
+        method="POST"
+        class="company-form"
+    >
+
+        <div class="input-group">
+
+            <label for="name">
+
+                企業名
+
+                <span>
+                    必須
+                </span>
+
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                required
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label for="status">
+
+                選考状況
+
+                <span>
+                    必須
+                </span>
+
+            </label>
+
+            <select
+                id="status"
+                name="status"
+                required
+            >
+
+                <option value="">
+                    選択してください
+                </option>
+
+                <option value="応募予定">
+                    応募予定
+                </option>
+
+                <option value="ES作成中">
+                    ES作成中
+                </option>
+
+                <option value="ES提出済">
+                    ES提出済
+                </option>
+
+                <option value="適性検査">
+                    適性検査
+                </option>
+
+                <option value="一次面接">
+                    一次面接
+                </option>
+
+                <option value="二次面接">
+                    二次面接
+                </option>
+
+                <option value="最終面接">
+                    最終面接
+                </option>
+
+                <option value="結果待ち">
+                    結果待ち
+                </option>
+
+                <option value="内々定">
+                    内々定
+                </option>
+
+                <option value="不合格">
+                    不合格
+                </option>
+
+                <option value="辞退">
+                    辞退
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="input-group">
+
+            <label for="next_schedule">
+                次の予定
+            </label>
+
+            <input
+                type="text"
+                id="next_schedule"
+                name="next_schedule"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label for="deadline">
+                締切
+            </label>
+
+            <input
+                type="date"
+                id="deadline"
+                name="deadline"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label for="mypage_url">
+                マイページURL
+            </label>
+
+            <input
+                type="url"
+                id="mypage_url"
+                name="mypage_url"
+            >
+
+        </div>
+
+        <div class="form-buttons">
+
+            <a
+                href="/companies"
+                class="cancel-button"
+            >
+                キャンセル
+            </a>
+
+            <button
+                type="submit"
+                class="save-button"
+            >
+                企業を登録する
+            </button>
+
+        </div>
+
+    </form>
+
+</main>
+
+</body>
+
+</html>

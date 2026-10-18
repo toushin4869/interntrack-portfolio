@@ -1,0 +1,183 @@
+/* =========================
+   企業追加ページ全体
+========================= */
+
+.add-company-page {
+    width: min(920px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 28px 0 44px;
+}
+
+.page-title {
+    margin-bottom: 22px;
+}
+
+.page-title h1 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.2;
+}
+
+.page-title > p:last-child {
+    margin: 9px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+
+/* =========================
+   エラーメッセージ
+========================= */
+
+.form-error {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    border: 1px solid #f1bcc0;
+    border-radius: 10px;
+    color: var(--red);
+    background: var(--red-light);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+/* =========================
+   フォーム本体
+========================= */
+
+.company-form {
+    padding: 30px 32px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.input-group {
+    margin-bottom: 24px;
+}
+
+.input-group label {
+    margin-bottom: 9px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #343d50;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.input-group label span {
+    padding: 3px 7px;
+    border-radius: 999px;
+    color: var(--purple);
+    background: var(--purple-light);
+    font-size: 9px;
+    font-weight: 900;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 14px;
+    border: 1px solid #d8dee8;
+    border-radius: 9px;
+    color: var(--text);
+    background: white;
+    font-size: 14px;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.input-group input:hover,
+.input-group select:hover {
+    border-color: #bcc4d1;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px var(--purple-light);
+}
+
+
+/* =========================
+   フォーム下部ボタン
+========================= */
+
+.form-buttons {
+    margin-top: 8px;
+    padding-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #edf0f4;
+}
+
+.cancel-button,
+.save-button {
+    min-height: 45px;
+    padding: 0 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.cancel-button {
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: white;
+}
+
+.cancel-button:hover {
+    border-color: #c5cbd6;
+    color: var(--text);
+    background: #f7f8fa;
+}
+
+.save-button {
+    border: none;
+    color: white;
+    background: var(--purple);
+}
+
+.save-button:hover {
+    background: var(--purple-dark);
+}
+
+
+/* =========================
+   スマートフォン
+========================= */
+
+@media (max-width: 650px) {
+    .add-company-page {
+        width: calc(100% - 28px);
+        padding-top: 22px;
+    }
+
+    .page-title h1 {
+        font-size: 29px;
+    }
+
+    .company-form {
+        padding: 24px 18px;
+    }
+
+    .form-buttons {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .cancel-button,
+    .save-button {
+        width: 100%;
+    }
+}

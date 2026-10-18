@@ -1,0 +1,488 @@
+/* =========================
+   企業一覧ページ全体
+========================= */
+
+.companies-page {
+    width: min(1320px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 28px 0 40px;
+}
+
+.companies-heading {
+    margin-bottom: 22px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.companies-heading h1 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.2;
+}
+
+.companies-heading p:not(.welcome-label) {
+    margin: 9px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.companies-add-button {
+    padding: 12px 18px;
+    border-radius: 9px;
+    color: white;
+    background: var(--purple);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.companies-add-button:hover {
+    background: var(--purple-dark);
+}
+
+
+/* =========================
+   検索・企業数
+========================= */
+
+.company-toolbar {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.company-search {
+    width: min(420px, 100%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.company-toolbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.company-search > span {
+    color: var(--muted);
+    font-size: 20px;
+}
+
+.company-search input {
+    width: 100%;
+    padding: 8px 0;
+    border: none;
+    color: var(--text);
+    background: transparent;
+    font-size: 13px;
+}
+
+.company-search input::placeholder {
+    color: #9aa3b5;
+}
+
+.company-sort {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.company-sort select {
+    min-width: 142px;
+    padding: 9px 32px 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    background: white;
+    font-size: 12px;
+}
+
+.company-search-button {
+    padding: 9px 15px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    background: var(--purple);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.company-search-button:hover {
+    background: var(--purple-dark);
+}
+
+.company-search-reset {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.company-search-reset:hover {
+    color: var(--purple);
+}
+
+.company-count {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.company-count strong {
+    margin: 0 4px;
+    color: var(--text);
+    font-size: 21px;
+}
+
+
+/* =========================
+   企業カード一覧
+========================= */
+
+.company-card-list {
+    display: grid;
+    gap: 14px;
+}
+
+.company-list-card {
+    min-height: 126px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns:
+        minmax(250px, 0.85fr)
+        minmax(500px, 1.8fr)
+        auto;
+    align-items: center;
+    gap: 28px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.company-list-card:hover {
+    transform: translateY(-1px);
+    border-color: #cbd1e0;
+    box-shadow: 0 9px 24px rgba(23, 36, 61, 0.08);
+}
+
+
+/* =========================
+   企業名・ステータス
+========================= */
+
+.company-overview {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.company-letter {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 14px;
+    color: white;
+    background: var(--navy);
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.company-overview h2 {
+    max-width: 240px;
+    margin: 0 0 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 20px;
+}
+
+.company-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 999px;
+    color: var(--green);
+    background: var(--green-light);
+    font-size: 10px;
+    font-weight: 900;
+}
+
+
+/* =========================
+   企業情報
+========================= */
+
+.company-details {
+    min-width: 0;
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.2fr)
+        minmax(0, 0.8fr)
+        minmax(0, 0.9fr);
+    gap: 22px;
+}
+
+.company-detail-item {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.company-detail-item > span {
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.company-detail-item strong,
+.company-detail-item a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.company-detail-item a {
+    color: var(--purple);
+    text-decoration: none;
+    font-weight: 900;
+}
+
+.company-detail-item a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   操作ボタン
+========================= */
+
+.company-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.company-detail-button {
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: white;
+    background: var(--purple);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.company-detail-button:hover {
+    background: var(--purple-dark);
+}
+
+.company-menu-button {
+    width: 39px;
+    height: 39px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    background: white;
+    font-size: 18px;
+}
+
+.company-menu-button:hover {
+    border-color: #c4cad6;
+    background: #f7f8fb;
+}
+
+
+/* =========================
+   企業未登録表示
+========================= */
+
+.company-empty {
+    min-height: 440px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.company-empty-icon {
+    width: 72px;
+    height: 72px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 18px;
+    border-radius: 20px;
+    color: var(--purple);
+    background: var(--purple-light);
+    font-size: 32px;
+    font-weight: 900;
+}
+
+.company-empty h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.company-empty p {
+    margin: 10px 0 22px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.company-empty a {
+    padding: 12px 18px;
+    border-radius: 9px;
+    color: white;
+    background: var(--purple);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.company-empty a:hover {
+    background: var(--purple-dark);
+}
+
+
+/* =========================
+   レスポンシブ
+========================= */
+
+@media (max-width: 1050px) {
+    .company-list-card {
+        grid-template-columns: 1fr auto;
+    }
+
+    .company-details {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+}
+
+@media (max-width: 720px) {
+    .companies-page {
+        width: calc(100% - 28px);
+    }
+
+    .companies-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .companies-add-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .company-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .company-search,
+    .company-toolbar-actions {
+        width: 100%;
+    }
+
+    .company-toolbar-actions {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .company-count {
+        margin-left: auto;
+    }
+
+    .company-list-card {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .company-details {
+        grid-column: auto;
+        grid-row: auto;
+        grid-template-columns: 1fr;
+    }
+
+    .company-actions {
+        justify-content: flex-end;
+    }
+}
+
+/* =========================
+   企業一覧の絞り込みタブ
+========================= */
+
+.company-filter-tabs {
+    margin-bottom: 14px;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.company-filter-tabs a {
+    padding: 9px 15px;
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.company-filter-tabs a:hover {
+    color: var(--text);
+    background: #f2f4f8;
+}
+
+.company-filter-tabs a.active {
+    color: white;
+    background: var(--purple);
+}
+
+@media (max-width: 720px) {
+    .company-filter-tabs {
+        align-items: stretch;
+    }
+}

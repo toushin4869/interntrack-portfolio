@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>カレンダー | InternTrack</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+</head>
+
+<body>
+{% if demo_mode %}
+<div style="background:#173e60;color:#fff;padding:10px 18px;text-align:center;font-size:13px;line-height:1.6;position:relative;z-index:9999">
+  <strong>InternTrack ポートフォリオデモ</strong> — 企業名・予定はすべて架空です。データは訪問者ごとに分離され、一定期間後に消えます。実際の個人情報を入力しないでください。メール連携は無効です。
+</div>
+{% endif %}
+
+    <!-- =====================================================
+         ヘッダー
+    ====================================================== -->
+
+    {% include "header.html" %}
+
+    <!-- =====================================================
+         メインコンテンツ
+    ====================================================== -->
+
+    <main class="calendar-page compact-calendar-page">
+
+        <div class="calendar-container">
+
+            <!-- タイトル・集計 -->
+
+            <section class="calendar-heading">
+
+                <div class="calendar-title-block">
+                    <h1>カレンダー</h1>
+                </div>
+
+
+                <div class="calendar-summary-cards">
+
+                    <div class="calendar-summary-card">
+                        <span>今日</span>
+                        <strong>{{ today_count }}</strong>
+                        <small>件</small>
+                    </div>
+
+
+                    <div class="calendar-summary-card deadline">
+                        <span>今月の締切</span>
+                        <strong>{{ deadline_count }}</strong>
+                        <small>件</small>
+                    </div>
+
+
+                    <div class="calendar-summary-card interview">
+                        <span>今月の面接</span>
+                        <strong>{{ interview_count }}</strong>
+                        <small>件</small>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- 表示切り替え -->
+
+            <section class="calendar-view-bar">
+
+                <div class="calendar-view-tabs" aria-label="カレンダー表示切り替え">
+
+                    <a href="{{ url_for(
+                        'calendar_view',
+                        year=selected_year,
+                        month=selected_month,
+                        view='month'
+                    ) }}" class="
+                        calendar-view-tab
+                        {% if view_mode == 'month' %}
+                            active
+                        {% endif %}
+                    ">
+                        月表示
+                    </a>
+
+
+                    <a href="{{ url_for(
+                        'calendar_view',
+                        year=selected_year,
+                        month=selected_month,
+                        view='list'
+                    ) }}" class="
+                        calendar-view-tab
+                        {% if view_mode == 'list' %}
+                            active
+                        {% endif %}
+                    ">
+                        一覧表示
+                    </a>
+
+
+                    <span class="calendar-view-tab disabled" title="今後追加予定">
+                        週表示（準備中）
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+             月表示
+        ================================================== -->
+
+            {% if view_mode == 'month' %}
+
+            <section class="calendar-layout">
+
+                <section class="calendar-panel">
+
+                    <!-- 月移動 -->
+
+                    <div class="calendar-toolbar">
+
+                        <div class="calendar-month-navigation">
+
+                            <a href="{{ url_for(
+                                'calendar_view',
+                                year=previous_year,
+                                month=previous_month,
+                                view='month'
+                            ) }}" class="calendar-navigation-button" aria-label="前月">
+                                ‹
+                            </a>
+
+
+                            <div class="calendar-current-month">
+
+                                <strong>
+                                    {{ selected_year }}年{{ selected_month }}月
+                                </strong>
+
+                                <span>
+                                    月間スケジュール
+                                </span>
+
+                            </div>
+
+
+                            <a href="{{ url_for(
+                                'calendar_view',
+                                year=next_year,
+                                month=next_month,
+                                view='month'
+                            ) }}" class="calendar-navigation-button" aria-label="翌月">
+                                ›
+                            </a>
+
+                        </div>
+
+
+                        <a href="{{ url_for(
+                            'calendar_view',
+                            year=today.year,
+                            month=today.month,
+                            view='month'
+                        ) }}" class="today-button">
+                            今日へ戻る
+                        </a>
+
+                    </div>
+
+
+                    <!-- 曜日 -->
+
+                    <div class="calendar-weekdays">
+                        <div>月</div>
+                        <div>火</div>
+                        <div>水</div>
+                        <div>木</div>
+                        <div>金</div>
+                        <div class="saturday">土</div>
+                        <div class="sunday">日</div>
+                    </div>
+
+
+                    <!-- カレンダー本体 -->
+
+                    <div class="calendar-grid">
+
+                        {% for calendar_day in calendar_days %}
+
+                        <article class="
+                            calendar-day
+
+                            {% if not calendar_day['is_current_month'] %}
+                                other-month
+                            {% endif %}
+
+                            {% if calendar_day['is_today'] %}
+                                today
+                            {% endif %}
+
+                            {% if calendar_day['is_saturday'] %}
+                                saturday
+                            {% endif %}
+
+                            {% if calendar_day['is_sunday'] %}
+                                sunday
+                            {% endif %}
+
+                            {% if calendar_day['is_holiday'] %}
+                                holiday
+                            {% endif %}
+                        " data-date="{{ calendar_day['date_text'] }}">
+
+                            <!-- セルをクリックして予定追加 -->
+
+                            <button type="button" class="calendar-day-background"
+                                data-calendar-date="{{ calendar_day['date_text'] }}"
+                                aria-label="{{ calendar_day['date_text'] }}に予定を追加"></button>
+
+
+                            <!-- 日付 -->
+
+                            <div class="calendar-day-header">
+
+                                <span class="calendar-day-number">
+                                    {{ calendar_day['day'] }}
+                                </span>
+
+
+                                <div class="calendar-day-labels">
+
+                                    {% if calendar_day['holiday_name'] %}
+
+                                    <span class="holiday-name">
+                                        {{ calendar_day['holiday_name'] }}
+                                    </span>
+
+                                    {% endif %}
+
+
+                                    {% if calendar_day['is_today'] %}
+
+                                    <span class="today-label">
+                                        今日
+                                    </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- 予定 -->
+
+                            <div class="calendar-day-items">
+
+                                {% for item in calendar_day['items'][:2] %}
+
+                                {% if item['kind'] == 'event' %}
+
+                                <button type="button" class="calendar-item event js-edit-event"
+                                    data-event-id="{{ item['event_id'] }}" data-company-id="{{ item['company_id'] }}"
+                                    data-event-date="{{ item['date'] }}" data-event-type="{{ item['event_type'] }}"
+                                    data-title="{{ item['title'] }}" data-memo="{{ item['memo'] }}"
+                                    title="{{ item['company_name'] }}：{{ item['title'] }}">
+
+                                    <span class="calendar-item-dot"></span>
+
+                                    <span class="calendar-item-text">
+
+                                        <strong>
+                                            {{ item['company_name'] }}
+                                        </strong>
+
+                                        <small>
+                                            {{ item['title'] }}
+                                        </small>
+
+                                    </span>
+
+                                </button>
+
+
+                                {% else %}
+
+                                <a href="{{ url_for(
+                                        'company_detail',
+                                        company_id=item['company_id']
+                                    ) }}" class="calendar-item deadline"
+                                    title="{{ item['company_name'] }}：{{ item['title'] }}">
+
+                                    <span class="calendar-item-dot"></span>
+
+                                    <span class="calendar-item-text">
+
+                                        <strong>
+                                            {{ item['company_name'] }}
+                                        </strong>
+
+                                        <small>
+                                            締切
+                                        </small>
+
+                                    </span>
+
+                                </a>
+
+                                {% endif %}
+
+                                {% endfor %}
+
+
+                                {% if calendar_day['items']|length > 2 %}
+
+                                <a href="{{ url_for(
+                                    'calendar_view',
+                                    year=selected_year,
+                                    month=selected_month,
+                                    view='list'
+                                ) }}" class="calendar-more-items">
+                                    ＋{{ calendar_day['items']|length - 2 }}件
+                                </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </article>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- =================================================
+             一覧表示
+        ================================================== -->
+
+            {% else %}
+
+            <section class="list-view-panel">
+
+                <!-- 一覧上部 -->
+
+                <div class="list-view-toolbar">
+
+                    <div class="calendar-month-navigation">
+
+                        <a href="{{ url_for(
+                            'calendar_view',
+                            year=previous_year,
+                            month=previous_month,
+                            view='list',
+                            q=search_query,
+                            type=selected_type
+                        ) }}" class="calendar-navigation-button" aria-label="前月">
+                            ‹
+                        </a>
+
+
+                        <div class="calendar-current-month">
+
+                            <strong>
+                                {{ selected_year }}年{{ selected_month }}月
+                            </strong>
+
+                            <span>
+                                予定一覧
+                            </span>
+
+                        </div>
+
+
+                        <a href="{{ url_for(
+                            'calendar_view',
+                            year=next_year,
+                            month=next_month,
+                            view='list',
+                            q=search_query,
+                            type=selected_type
+                        ) }}" class="calendar-navigation-button" aria-label="翌月">
+                            ›
+                        </a>
+
+                    </div>
+
+
+                    <!-- 検索・絞り込み -->
+
+                    <form method="GET" action="{{ url_for('calendar_view') }}" class="calendar-filter-form">
+
+                        <input type="hidden" name="year" value="{{ selected_year }}">
+
+                        <input type="hidden" name="month" value="{{ selected_month }}">
+
+                        <input type="hidden" name="view" value="list">
+
+
+                        <label class="calendar-search-field">
+
+                            <span class="visually-hidden">
+                                予定を検索
+                            </span>
+
+                            <span class="calendar-search-icon">
+                                ⌕
+                            </span>
+
+                            <input type="search" name="q" value="{{ search_query }}" placeholder="企業名・予定名で検索"
+                                autocomplete="off">
+
+                        </label>
+
+
+                        <label class="calendar-type-field">
+
+                            <span class="visually-hidden">
+                                種類で絞り込み
+                            </span>
+
+                            <select name="type">
+
+                                <option value="all" {% if selected_type=='all' %} selected {% endif %}>
+                                    すべての種類
+                                </option>
+
+
+                                {% for type_option in type_options %}
+
+                                <option value="{{ type_option }}" {% if selected_type==type_option %} selected {% endif
+                                    %}>
+                                    {{ type_option }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </label>
+
+
+                        <button type="submit" class="calendar-filter-button">
+                            絞り込む
+                        </button>
+
+
+                        {% if search_query or selected_type != 'all' %}
+
+                        <a href="{{ url_for(
+                            'calendar_view',
+                            year=selected_year,
+                            month=selected_month,
+                            view='list'
+                        ) }}" class="calendar-filter-reset">
+                            リセット
+                        </a>
+
+                        {% endif %}
+
+                    </form>
+
+                </div>
+
+
+                <!-- 件数 -->
+
+                <div class="list-view-result-bar">
+
+                    <div class="list-result-information">
+
+                        <strong>
+                            {{ filtered_items|length }}件
+                        </strong>
+
+                        <span>
+                            該当する予定を日付順に表示しています
+                        </span>
+
+                    </div>
+
+
+                    <button type="button" class="list-add-event-button" data-calendar-date="{{ today.isoformat() }}">
+                        <span>＋</span>
+                        予定を追加
+                    </button>
+
+                </div>
+
+
+                <!-- 予定がある場合 -->
+
+                {% if list_groups %}
+
+                <div class="schedule-groups">
+
+                    {% for group in list_groups %}
+
+                    <section class="schedule-group">
+
+                        <div class="schedule-group-heading">
+
+                            <div class="schedule-group-title">
+
+                                <span class="
+                                    schedule-group-marker
+
+                                    {% if group['title'] == '今日' %}
+                                        today
+                                    {% elif group['title'] == '明日' %}
+                                        tomorrow
+                                    {% elif group['title'] == '今週' %}
+                                        week
+                                    {% else %}
+                                        future
+                                    {% endif %}
+                                "></span>
+
+                                <h2>
+                                    {{ group['title'] }}
+                                </h2>
+
+                            </div>
+
+
+                            <span class="schedule-group-count">
+                                {{ group['items']|length }}件
+                            </span>
+
+                        </div>
+
+
+                        <div class="schedule-list">
+
+                            {% for item in group['items'] %}
+
+                            {% if item['kind'] == 'event' %}
+
+                            <button type="button" class="schedule-list-item js-edit-event"
+                                data-event-id="{{ item['event_id'] }}" data-company-id="{{ item['company_id'] }}"
+                                data-event-date="{{ item['date'] }}" data-event-type="{{ item['event_type'] }}"
+                                data-title="{{ item['title'] }}" data-memo="{{ item['memo'] }}">
+
+                                {% else %}
+
+                                <a href="{{ url_for(
+                                    'company_detail',
+                                    company_id=item['company_id']
+                                ) }}" class="schedule-list-item">
+
+                                    {% endif %}
+
+
+                                    <!-- 日付 -->
+
+                                    <div class="
+                                    schedule-list-date
+                                    {{ item['kind'] }}
+                                ">
+
+                                        <span>
+                                            {{ item['date'][5:7] }}月
+                                        </span>
+
+                                        <strong>
+                                            {{ item['date'][8:10] }}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <!-- 予定内容 -->
+
+                                    <div class="schedule-list-main">
+
+                                        <div class="schedule-list-meta">
+
+                                            <span class="
+                                            schedule-type-badge
+
+                                            {% if item['kind'] == 'deadline' %}
+                                                deadline
+                                            {% elif item['event_type'] == '面接' %}
+                                                interview
+                                            {% elif item['event_type'] == 'ES' %}
+                                                es
+                                            {% elif item['event_type'] == '説明会' %}
+                                                seminar
+                                            {% elif item['event_type'] == '適性検査' %}
+                                                test
+                                            {% elif item['event_type'] == 'インターン' %}
+                                                internship
+                                            {% else %}
+                                                event
+                                            {% endif %}
+                                        ">
+
+                                                {% if item['kind'] == 'deadline' %}
+                                                締切
+                                                {% else %}
+                                                {{ item['event_type'] }}
+                                                {% endif %}
+
+                                            </span>
+
+
+                                            <time datetime="{{ item['date'] }}">
+                                                {{ item['date'].replace('-', '/') }}
+                                            </time>
+
+                                        </div>
+
+
+                                        <h3>
+                                            {{ item['company_name'] }}
+                                        </h3>
+
+
+                                        <p>
+
+                                            {% if item['title'] %}
+
+                                            {{ item['title'] }}
+
+                                            {% elif item['kind'] == 'deadline' %}
+
+                                            応募締切
+
+                                            {% else %}
+
+                                            {{ item['event_type'] }}
+
+                                            {% endif %}
+
+                                        </p>
+
+
+                                        {% if item['memo'] %}
+
+                                        <small class="schedule-list-memo">
+                                            {{ item['memo'] }}
+                                        </small>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <!-- 操作 -->
+
+                                    <span class="schedule-list-action">
+
+                                        {% if item['kind'] == 'event' %}
+                                        <span>編集</span>
+                                        {% else %}
+                                        <span>詳細</span>
+                                        {% endif %}
+
+                                        <strong>›</strong>
+
+                                    </span>
+
+
+                                    {% if item['kind'] == 'event' %}
+
+                            </button>
+
+                            {% else %}
+
+                            </a>
+
+                            {% endif %}
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- 予定がない場合 -->
+
+                {% else %}
+
+                <div class="list-view-empty">
+
+                    <div class="list-empty-icon">
+                        ◷
+                    </div>
+
+                    <strong>
+                        該当する予定がありません
+                    </strong>
+
+                    <p>
+                        検索条件を変更するか、新しい予定を追加してください。
+                    </p>
+
+
+                    {% if search_query or selected_type != 'all' %}
+
+                    <a href="{{ url_for(
+                        'calendar_view',
+                        year=selected_year,
+                        month=selected_month,
+                        view='list'
+                    ) }}" class="list-empty-reset-button">
+                        絞り込みを解除
+                    </a>
+
+
+                    {% else %}
+
+                    <button type="button" class="list-empty-add-button" data-calendar-date="{{ today.isoformat() }}">
+                        ＋ 予定を追加
+                    </button>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+            </section>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         予定追加・編集モーダル
+    ====================================================== -->
+
+    <div id="event-modal" class="event-modal" hidden>
+
+        <div class="event-modal-backdrop" data-close-modal></div>
+
+
+        <section class="event-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="event-modal-title">
+
+            <div class="event-modal-header">
+
+                <div>
+
+                    <p class="welcome-label">
+                        CALENDAR EVENT
+                    </p>
+
+                    <h2 id="event-modal-title">
+                        予定を追加
+                    </h2>
+
+                </div>
+
+
+                <button type="button" class="event-modal-close" data-close-modal aria-label="閉じる">
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- 保存フォーム -->
+
+            <form method="POST" action="{{ url_for('save_calendar_event') }}" class="event-form">
+
+                <input type="hidden" name="event_id" id="event-id">
+
+                <input type="hidden" name="selected_year" value="{{ selected_year }}">
+
+                <input type="hidden" name="selected_month" value="{{ selected_month }}">
+
+                <input type="hidden" name="view_mode" value="{{ view_mode }}">
+
+
+                <div class="event-form-grid">
+
+                    <label class="event-form-field">
+
+                        <span>
+                            日付
+                        </span>
+
+                        <input type="date" name="event_date" id="event-date" required>
+
+                    </label>
+
+
+                    <label class="event-form-field">
+
+                        <span>
+                            企業
+                        </span>
+
+                        <select name="company_id" id="event-company" required>
+
+                            <option value="">
+                                企業を選択
+                            </option>
+
+
+                            {% for company in companies %}
+
+                            <option value="{{ company['id'] }}">
+                                {{ company['name'] }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </label>
+
+
+                    <label class="event-form-field">
+
+                        <span>
+                            予定の種類
+                        </span>
+
+                        <select name="event_type" id="event-type">
+                            <option value="説明会">説明会</option>
+                            <option value="ES">ES</option>
+                            <option value="適性検査">適性検査</option>
+                            <option value="面接">面接</option>
+                            <option value="面談">面談</option>
+                            <option value="インターン">インターン</option>
+                            <option value="結果発表">結果発表</option>
+                            <option value="その他">その他</option>
+                        </select>
+
+                    </label>
+
+
+                    <label class="event-form-field">
+
+                        <span>
+                            タイトル
+                        </span>
+
+                        <input type="text" name="title" id="event-title" placeholder="例：一次面接">
+
+                    </label>
+
+
+                    <label class="event-form-field event-form-full">
+
+                        <span>
+                            メモ
+                        </span>
+
+                        <textarea 
+                            name="memo" 
+                            id="event-memo" 
+                            class="event-memo-textarea" 
+                            rows="8"
+                            placeholder="場所、持ち物、URL、メール内容など">
+                        </textarea>
+
+                    </label>
+
+                </div>
+
+
+                <div class="event-form-actions">
+
+                    <button type="button" id="delete-event-button" class="delete-event-button" hidden>
+                        削除
+                    </button>
+
+
+                    <div class="event-form-main-actions">
+
+                        <button type="button" class="cancel-event-button" data-close-modal>
+                            キャンセル
+                        </button>
+
+                        <button type="submit" class="save-event-button">
+                            保存する
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+
+            <!-- 削除フォーム -->
+
+            <form method="POST" id="delete-event-form" class="delete-event-form">
+
+                <input type="hidden" name="selected_year" value="{{ selected_year }}">
+
+                <input type="hidden" name="selected_month" value="{{ selected_month }}">
+
+                <input type="hidden" name="view_mode" value="{{ view_mode }}">
+
+            </form>
+
+        </section>
+
+    </div>
+
+
+    <!-- =====================================================
+         JavaScript
+    ====================================================== -->
+
+    <script>
+        const modal = document.getElementById("event-modal");
+        const modalTitle = document.getElementById("event-modal-title");
+
+        const eventIdInput = document.getElementById("event-id");
+        const eventDateInput = document.getElementById("event-date");
+        const eventCompanyInput = document.getElementById("event-company");
+        const eventTypeInput = document.getElementById("event-type");
+        const eventTitleInput = document.getElementById("event-title");
+        const eventMemoInput = document.getElementById("event-memo");
+
+        const deleteButton = document.getElementById(
+            "delete-event-button"
+        );
+
+        const deleteForm = document.getElementById(
+            "delete-event-form"
+        );
+
+
+        function openModal() {
+            modal.hidden = false;
+            document.body.classList.add("modal-open");
+        }
+
+
+        function closeModal() {
+            modal.hidden = true;
+            document.body.classList.remove("modal-open");
+        }
+
+
+        function openNewEventModal(eventDate) {
+            modalTitle.textContent = "予定を追加";
+
+            eventIdInput.value = "";
+            eventDateInput.value = eventDate;
+            eventCompanyInput.value = "";
+            eventTypeInput.value = "説明会";
+            eventTitleInput.value = "";
+            eventMemoInput.value = "";
+
+            deleteButton.hidden = true;
+
+            openModal();
+
+            setTimeout(function () {
+                eventCompanyInput.focus();
+            }, 50);
+        }
+
+
+        function openEditEventModal(button) {
+            modalTitle.textContent = "予定を編集";
+
+            eventIdInput.value =
+                button.dataset.eventId || "";
+
+            eventDateInput.value =
+                button.dataset.eventDate || "";
+
+            eventCompanyInput.value =
+                button.dataset.companyId || "";
+
+            eventTypeInput.value =
+                button.dataset.eventType || "その他";
+
+            eventTitleInput.value =
+                button.dataset.title || "";
+
+            eventMemoInput.value =
+                button.dataset.memo || "";
+
+            deleteButton.hidden = false;
+
+            deleteForm.action =
+                "/calendar/event/"
+                + button.dataset.eventId
+                + "/delete";
+
+            openModal();
+        }
+
+
+        document
+            .querySelectorAll("[data-calendar-date]")
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+                        openNewEventModal(
+                            button.dataset.calendarDate
+                        );
+                    }
+                );
+
+            });
+
+
+        document
+            .querySelectorAll(".js-edit-event")
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function (event) {
+                        event.stopPropagation();
+                        openEditEventModal(button);
+                    }
+                );
+
+            });
+
+
+        document
+            .querySelectorAll("[data-close-modal]")
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    closeModal
+                );
+
+            });
+
+
+        deleteButton.addEventListener(
+            "click",
+            function () {
+
+                const shouldDelete = window.confirm(
+                    "この予定を削除しますか？"
+                );
+
+                if (shouldDelete) {
+                    deleteForm.submit();
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape"
+                    && !modal.hidden
+                ) {
+                    closeModal();
+                }
+
+            }
+        );
+    </script>
+
+</body>
+
+</html>

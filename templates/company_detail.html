@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ company["name"] }} | InternTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/common.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/company_detail.css') }}"
+    >
+</head>
+
+<body>
+{% if demo_mode %}
+<div style="background:#173e60;color:#fff;padding:10px 18px;text-align:center;font-size:13px;line-height:1.6;position:relative;z-index:9999">
+  <strong>InternTrack ポートフォリオデモ</strong> — 企業名・予定はすべて架空です。データは訪問者ごとに分離され、一定期間後に消えます。実際の個人情報を入力しないでください。メール連携は無効です。
+</div>
+{% endif %}
+
+<header class="app-header">
+
+    <a
+        href="{{ url_for('index') }}"
+        class="brand"
+    >
+
+        <span class="brand-icon">
+            IT
+        </span>
+
+        <div class="brand-text">
+
+            <strong>
+                InternTrack
+            </strong>
+
+            <span>
+                就活管理アプリ
+            </span>
+
+        </div>
+
+    </a>
+
+    <nav class="main-nav">
+
+        <a href="{{ url_for('index') }}">
+            ホーム
+        </a>
+
+        <a
+            href="{{ url_for('companies') }}"
+            class="active"
+        >
+            企業一覧
+        </a>
+
+        <a href="#">
+            カレンダー
+        </a>
+
+        <a href="#">
+            メール
+        </a>
+
+    </nav>
+
+    <a
+        href="{{ url_for('add_company') }}"
+        class="header-add-button"
+    >
+        ＋ 企業を追加
+    </a>
+
+</header>
+
+
+<main class="detail-page">
+
+    <div class="detail-page-top">
+
+        <a
+            href="{{ url_for('companies') }}"
+            class="back-button"
+        >
+            <span>←</span>
+            企業一覧へ戻る
+        </a>
+
+    </div>
+
+
+    <section class="company-detail-card">
+
+        <header class="company-detail-header">
+
+            <div class="company-main-info">
+
+                <div class="company-large-letter">
+                    {{ company["name"][0] }}
+                </div>
+
+                <div class="company-title-area">
+
+                    <p class="company-label">
+                        COMPANY DETAILS
+                    </p>
+
+                    <h1>
+                        {{ company["name"] }}
+                    </h1>
+
+                    <div class="company-meta">
+
+                        <span class="company-id">
+                            企業ID：{{ company["id"] }}
+                        </span>
+
+                        <span class="company-status-badge">
+                            {{ company["status"] }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="detail-divider"></div>
+
+
+        <section class="detail-information-grid">
+
+            <article class="detail-information-card">
+
+                <div class="detail-icon">
+                    選
+                </div>
+
+                <div class="detail-information-content">
+
+                    <span>
+                        選考状況
+                    </span>
+
+                    <strong>
+                        {{ company["status"] }}
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="detail-information-card">
+
+                <div class="detail-icon">
+                    予
+                </div>
+
+                <div class="detail-information-content">
+
+                    <span>
+                        次の予定
+                    </span>
+
+                    <strong>
+                        {{ company["next_schedule"] or "未登録" }}
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="detail-information-card">
+
+                <div class="detail-icon">
+                    期
+                </div>
+
+                <div class="detail-information-content">
+
+                    <span>
+                        締切
+                    </span>
+
+                    <strong>
+                        {{ company["deadline"] or "未登録" }}
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="detail-information-card mypage-card">
+
+                <div class="detail-icon">
+                    M
+                </div>
+
+                <div class="detail-information-content">
+
+                    <span>
+                        マイページ
+                    </span>
+
+                    {% if company["mypage_url"] %}
+
+                        <a
+                            href="{{ company['mypage_url'] }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="mypage-link"
+                        >
+                            マイページを開く
+                            <span>↗</span>
+                        </a>
+
+                    {% else %}
+
+                        <strong>
+                            未登録
+                        </strong>
+
+                    {% endif %}
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <div class="detail-divider"></div>
+
+
+        <section class="selection-history-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-label">
+                        SELECTION HISTORY
+                    </p>
+
+                    <h2>
+                        選考履歴
+                    </h2>
+
+                    <p>
+                        ES提出、適性検査、面接などの履歴を登録できます。
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('add_company_event', company_id=company['id']) }}"
+                class="event-add-form"
+            >
+
+                <div class="event-form-grid">
+
+                    <div class="form-group">
+
+                        <label for="event_date">
+                            日付
+                        </label>
+
+                        <input
+                            type="date"
+                            id="event_date"
+                            name="event_date"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="event_type">
+                            種類
+                            <span class="required-mark">*</span>
+                        </label>
+
+                        <select
+                            id="event_type"
+                            name="event_type"
+                            required
+                        >
+
+                            <option value="">
+                                選択してください
+                            </option>
+
+                            <option value="説明会">
+                                説明会
+                            </option>
+
+                            <option value="インターン">
+                                インターン
+                            </option>
+
+                            <option value="ES">
+                                ES
+                            </option>
+
+                            <option value="適性検査">
+                                適性検査
+                            </option>
+
+                            <option value="面接">
+                                面接
+                            </option>
+
+                            <option value="結果通知">
+                                結果通知
+                            </option>
+
+                            <option value="その他">
+                                その他
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="title">
+                            タイトル
+                            <span class="required-mark">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="例：一次面接"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group event-memo-group">
+
+                    <label for="event_memo">
+                        メモ
+                    </label>
+
+                    <textarea
+                        id="event_memo"
+                        name="event_memo"
+                        rows="3"
+                        placeholder="例：オンライン面接、服装自由、逆質問を3つ準備"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="event-form-actions">
+
+                    <button
+                        type="submit"
+                        class="event-add-button"
+                    >
+                        ＋ 選考履歴を追加
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <div class="event-list">
+
+                {% if events %}
+
+                    {% for event in events %}
+
+                        <article class="event-item">
+
+                            <div class="event-date-area">
+
+                                {% if event["event_date"] %}
+
+                                    <span class="event-date">
+                                        {{ event["event_date"] }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="event-date event-date-empty">
+                                        日付未登録
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="event-timeline-mark">
+                                <span></span>
+                            </div>
+
+
+                            <div class="event-content">
+
+                                <div class="event-content-top">
+
+                                    <div>
+
+                                        <span class="event-type">
+                                            {{ event["event_type"] }}
+                                        </span>
+
+                                        <h3>
+                                            {{ event["title"] }}
+                                        </h3>
+
+                                    </div>
+
+
+                                    <div class="event-action-buttons">
+
+                                        <a
+                                            href="{{ url_for(
+                                                'edit_company_event',
+                                                company_id=company['id'],
+                                                event_id=event['id']
+                                            ) }}"
+                                            class="event-edit-button"
+                                            aria-label="選考履歴を編集"
+                                            title="編集"
+                                        >
+                                            ✎
+                                        </a>
+
+
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for(
+                                                'delete_company_event',
+                                                company_id=company['id'],
+                                                event_id=event['id']
+                                            ) }}"
+                                            onsubmit="return confirm('この選考履歴を削除してもよろしいですか？');"
+                                        >
+
+                                            <button
+                                                type="submit"
+                                                class="event-delete-button"
+                                                aria-label="選考履歴を削除"
+                                                title="削除"
+                                            >
+                                                ×
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
+
+
+                                {% if event["memo"] %}
+                                    <p class="event-memo">{{ event["memo"] }}</p>
+                                {% endif %}
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-event-message">
+
+                        <span class="empty-event-icon">
+                            📅
+                        </span>
+
+                        <strong>
+                            選考履歴はまだありません
+                        </strong>
+
+                        <p>
+                            上のフォームから最初の選考履歴を登録してください。
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <div class="detail-divider"></div>
+
+
+        <footer class="detail-actions">
+
+            <div class="detail-action-description">
+
+                <strong>
+                    企業情報の管理
+                </strong>
+
+                <p>
+                    登録内容の変更や企業情報の削除ができます。
+                </p>
+
+            </div>
+
+            <div class="detail-action-buttons">
+
+                <a
+                    href="{{ url_for('edit_company', company_id=company['id']) }}"
+                    class="edit-button"
+                >
+                    <span>✎</span>
+                    編集
+                </a>
+
+                <form
+                    method="POST"
+                    action="{{ url_for('delete_company', company_id=company['id']) }}"
+                    onsubmit="return confirm('この企業を削除してもよろしいですか？');"
+                >
+
+                    <button
+                        type="submit"
+                        class="delete-button"
+                    >
+                        <span>×</span>
+                        削除
+                    </button>
+
+                </form>
+
+            </div>
+
+        </footer>
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

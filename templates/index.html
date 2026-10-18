@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>InternTrack</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <style>
+        /* =========================================================
+           ヘッダー右側
+        ========================================================= */
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+
+        /* =========================================================
+           通知ボタン
+        ========================================================= */
+
+        .notification-menu {
+            position: relative;
+        }
+
+
+        .notification-button {
+            position: relative;
+
+            display: grid;
+            place-items: center;
+
+            width: 44px;
+            height: 44px;
+
+            padding: 0;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+
+            background: #ffffff;
+            color: #475569;
+
+            cursor: pointer;
+
+            transition:
+                border-color 0.15s ease,
+                background-color 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+
+        .notification-button:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+
+
+        .notification-button.is-open {
+            border-color: #94a3b8;
+
+            box-shadow:
+                0 0 0 3px rgba(148, 163, 184, 0.14);
+        }
+
+
+        .notification-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+
+            display: grid;
+            place-items: center;
+
+            min-width: 19px;
+            height: 19px;
+            box-sizing: border-box;
+
+            padding: 0 5px;
+
+            border: 2px solid #ffffff;
+            border-radius: 999px;
+
+            background: #ef4444;
+            color: #ffffff;
+
+            font-size: 10px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+
+        .notification-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            z-index: 1000;
+
+            width: 330px;
+            box-sizing: border-box;
+
+            padding: 10px;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 17px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 22px 50px rgba(15, 23, 42, 0.16);
+        }
+
+
+        .notification-dropdown[hidden] {
+            display: none;
+        }
+
+
+        .notification-dropdown-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+
+            padding: 10px;
+        }
+
+
+        .notification-dropdown-header strong {
+            color: #0f172a;
+            font-size: 15px;
+        }
+
+
+        .notification-dropdown-header span {
+            color: #64748b;
+            font-size: 11px;
+        }
+
+
+        .notification-empty {
+            display: grid;
+            place-items: center;
+
+            min-height: 150px;
+            padding: 20px;
+
+            border-radius: 12px;
+
+            background: #f8fafc;
+
+            text-align: center;
+        }
+
+
+        .notification-empty-icon {
+            display: grid;
+            place-items: center;
+
+            width: 44px;
+            height: 44px;
+
+            margin: 0 auto 10px;
+
+            border: 1px solid #e0e7ff;
+            border-radius: 13px;
+
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+
+        .notification-empty-icon svg {
+            width: 21px;
+            height: 21px;
+        }
+
+
+        .notification-empty strong {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #334155;
+            font-size: 14px;
+        }
+
+
+        .notification-empty p {
+            margin: 0;
+
+            color: #64748b;
+
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           ユーザーメニュー
+        ========================================================= */
+
+        .user-menu {
+            position: relative;
+        }
+
+
+        .user-menu-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            min-height: 44px;
+            padding: 4px 11px 4px 5px;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+
+            background: #ffffff;
+            color: #1e293b;
+
+            font: inherit;
+            cursor: pointer;
+
+            transition:
+                border-color 0.15s ease,
+                background-color 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+
+        .user-menu-button:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+
+
+        .user-menu-button.is-open {
+            border-color: #94a3b8;
+
+            box-shadow:
+                0 0 0 3px rgba(148, 163, 184, 0.14);
+        }
+
+
+        .user-avatar {
+            display: grid;
+            place-items: center;
+
+            width: 34px;
+            height: 34px;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(135deg,
+                    #2563eb,
+                    #4f46e5);
+
+            color: #ffffff;
+
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+
+        .user-menu-information {
+            display: grid;
+            gap: 1px;
+
+            min-width: 80px;
+
+            text-align: left;
+        }
+
+
+        .user-menu-information strong {
+            max-width: 130px;
+
+            overflow: hidden;
+
+            color: #1e293b;
+
+            font-size: 13px;
+            line-height: 1.3;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+
+        .user-menu-information small {
+            color: #64748b;
+            font-size: 10px;
+        }
+
+
+        .user-menu-arrow {
+            display: grid;
+            place-items: center;
+
+            color: #94a3b8;
+
+            transition: transform 0.15s ease;
+        }
+
+
+        .user-menu-arrow svg {
+            width: 13px;
+            height: 13px;
+        }
+
+
+        .user-menu-button.is-open .user-menu-arrow {
+            transform: rotate(180deg);
+        }
+
+
+        /* =========================================================
+           ユーザードロップダウン
+        ========================================================= */
+
+        .user-menu-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            z-index: 1000;
+
+            width: 310px;
+            box-sizing: border-box;
+
+            padding: 10px;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 17px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 22px 50px rgba(15, 23, 42, 0.16);
+        }
+
+
+        .user-menu-dropdown[hidden] {
+            display: none;
+        }
+
+
+        .user-menu-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 10px;
+        }
+
+
+        .user-menu-profile-avatar {
+            display: grid;
+            place-items: center;
+
+            width: 44px;
+            height: 44px;
+
+            flex-shrink: 0;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(135deg,
+                    #2563eb,
+                    #4f46e5);
+
+            color: #ffffff;
+
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+
+        .user-menu-profile-information {
+            min-width: 0;
+        }
+
+
+        .user-menu-profile-information strong {
+            display: block;
+
+            overflow: hidden;
+
+            color: #0f172a;
+
+            font-size: 14px;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+
+        .user-menu-profile-information span {
+            display: block;
+
+            margin-top: 3px;
+
+            overflow: hidden;
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+
+        .user-menu-divider {
+            height: 1px;
+            margin: 7px 4px;
+
+            background: #e2e8f0;
+        }
+
+
+        .user-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            padding: 10px;
+
+            border-radius: 11px;
+
+            color: #334155;
+
+            text-decoration: none;
+
+            transition: background-color 0.15s ease;
+        }
+
+
+        .user-menu-item:hover {
+            background: #f1f5f9;
+        }
+
+
+        .user-menu-item-icon {
+            display: grid;
+            place-items: center;
+
+            width: 36px;
+            height: 36px;
+
+            flex-shrink: 0;
+
+            border: 1px solid #e8edf5;
+            border-radius: 11px;
+
+            background: #f8fafc;
+            color: #475569;
+
+            transition:
+                color 0.15s ease,
+                background-color 0.15s ease,
+                border-color 0.15s ease;
+        }
+
+
+        .user-menu-item-icon svg {
+            width: 19px;
+            height: 19px;
+        }
+
+
+        .user-menu-item:hover .user-menu-item-icon {
+            border-color: #dbe4f0;
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+
+        .user-menu-item-content {
+            display: grid;
+            gap: 2px;
+
+            min-width: 0;
+        }
+
+
+        .user-menu-item-content strong {
+            color: #1e293b;
+            font-size: 13px;
+        }
+
+
+        .user-menu-item-content small {
+            color: #64748b;
+            font-size: 11px;
+        }
+
+
+        .user-menu-item-disabled {
+            opacity: 0.58;
+            cursor: default;
+        }
+
+
+        .user-menu-item-disabled:hover {
+            background: transparent;
+        }
+
+
+        .user-menu-item-disabled:hover .user-menu-item-icon {
+            border-color: #e8edf5;
+            background: #f8fafc;
+            color: #475569;
+        }
+
+
+        .user-menu-coming-soon {
+            margin-left: auto;
+
+            padding: 3px 6px;
+
+            border-radius: 999px;
+
+            background: #f1f5f9;
+            color: #64748b;
+
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+
+        .user-menu-logout-form {
+            margin: 0;
+        }
+
+
+        .user-menu-logout-button {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            width: 100%;
+            padding: 10px;
+
+            border: 0;
+            border-radius: 11px;
+
+            background: transparent;
+            color: #dc2626;
+
+            font: inherit;
+            font-size: 13px;
+            font-weight: 800;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            transition: background-color 0.15s ease;
+        }
+
+
+        .user-menu-logout-button:hover {
+            background: #fef2f2;
+        }
+
+
+        .user-menu-item-icon.logout {
+            border-color: #fee2e2;
+            background: #fff7f7;
+            color: #ef4444;
+        }
+
+
+        .user-menu-logout-button:hover .user-menu-item-icon.logout {
+            border-color: #fecaca;
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+
+        .login-header-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 42px;
+            padding: 0 16px;
+
+            border: 1px solid #e2e8f0;
+            border-radius: 11px;
+
+            background: #ffffff;
+            color: #334155;
+
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+
+        .login-header-link:hover {
+            background: #f8fafc;
+        }
+
+
+        /* =========================================================
+           ヘッダーの画面幅対応
+        ========================================================= */
+
+        @media (max-width: 1100px) {
+
+            .user-menu-information {
+                display: none;
+            }
+
+
+            .user-menu-button {
+                padding-right: 8px;
+            }
+
+        }
+
+
+        @media (max-width: 900px) {
+
+            .app-header {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+
+            .main-nav {
+                order: 3;
+
+                width: 100%;
+                overflow-x: auto;
+            }
+
+
+            .header-actions {
+                margin-left: auto;
+            }
+
+        }
+
+
+        @media (max-width: 680px) {
+
+            .header-add-button {
+                display: none;
+            }
+
+
+            .user-menu-arrow {
+                display: none;
+            }
+
+
+            .user-menu-button {
+                padding: 5px;
+            }
+
+
+            .user-menu-dropdown,
+            .notification-dropdown {
+                position: fixed;
+                top: 74px;
+                right: 14px;
+                left: 14px;
+
+                width: auto;
+            }
+
+
+            .brand-text span {
+                display: none;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+{% if demo_mode %}
+<div style="background:#173e60;color:#fff;padding:10px 18px;text-align:center;font-size:13px;line-height:1.6;position:relative;z-index:9999">
+  <strong>InternTrack ポートフォリオデモ</strong> — 企業名・予定はすべて架空です。データは訪問者ごとに分離され、一定期間後に消えます。実際の個人情報を入力しないでください。メール連携は無効です。
+</div>
+<style>
+  a[href="{{ url_for('email_settings') }}"],
+  a[href="{{ url_for('account') }}"],
+  form[action="{{ url_for('logout') }}"] { display: none !important; }
+</style>
+{% endif %}
+
+    <header class="app-header">
+
+        <a href="{{ url_for('index') }}" class="brand">
+
+            <span class="brand-icon">
+                IT
+            </span>
+
+            <div class="brand-text">
+
+                <strong>
+                    InternTrack
+                </strong>
+
+                <span>
+                    就活管理アプリ
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <nav class="main-nav">
+
+            <a href="{{ url_for('index') }}" class="active">
+                ホーム
+            </a>
+
+            <a href="{{ url_for('companies') }}">
+                企業一覧
+            </a>
+
+            <a href="{{ url_for('calendar_view') }}">
+                カレンダー
+            </a>
+
+            {% if not demo_mode %}
+            <a href="{{ url_for('email_settings') }}">
+                メール
+            </a>
+            {% endif %}
+
+        </nav>
+
+
+        <div class="header-actions">
+
+            <a href="{{ url_for('add_company') }}" class="header-add-button">
+                ＋ 企業を追加
+            </a>
+
+
+            {% if g.user %}
+
+            <!-- 通知 -->
+
+            <div class="notification-menu">
+
+                <button type="button" id="notification-button" class="notification-button" aria-expanded="false"
+                    aria-controls="notification-dropdown" aria-label="通知を確認">
+
+                    <svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+
+                        <path d="M10 21h4"></path>
+                    </svg>
+
+
+                    {% if deadline_count > 0 %}
+
+                    <span class="notification-count">
+                        {{ deadline_count }}
+                    </span>
+
+                    {% endif %}
+
+                </button>
+
+
+                <div id="notification-dropdown" class="notification-dropdown" hidden>
+
+                    <div class="notification-dropdown-header">
+
+                        <strong>
+                            通知
+                        </strong>
+
+                        <span>
+                            直近の確認事項
+                        </span>
+
+                    </div>
+
+
+                    {% if upcoming_deadlines %}
+
+                    <div class="priority-list">
+
+                        {% for company in upcoming_deadlines[:3] %}
+
+                        <a href="{{ url_for('company_detail', company_id=company['id']) }}" class="user-menu-item">
+
+                            <span class="user-menu-item-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+
+                                    <path d="M16 3v4"></path>
+                                    <path d="M8 3v4"></path>
+                                    <path d="M3 10h18"></path>
+                                </svg>
+                            </span>
+
+                            <span class="user-menu-item-content">
+
+                                <strong>
+                                    {{ company["name"] }}
+                                </strong>
+
+                                <small>
+                                    締切：{{ company["deadline"] }}
+                                </small>
+
+                            </span>
+
+                        </a>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="notification-empty">
+
+                        <div>
+
+                            <span class="notification-empty-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+
+                                    <path d="M10 21h4"></path>
+                                </svg>
+                            </span>
+
+                            <strong>
+                                新しい通知はありません
+                            </strong>
+
+                            <p>
+                                締切や選考予定が追加されると、ここに表示されます。
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ユーザーメニュー -->
+
+            <div class="user-menu">
+
+                <button type="button" id="user-menu-button" class="user-menu-button" aria-expanded="false"
+                    aria-controls="user-menu-dropdown">
+
+                    <span class="user-avatar">
+
+                        {% if g.user["name"] %}
+
+                        {{ g.user["name"][0] }}
+
+                        {% else %}
+
+                        U
+
+                        {% endif %}
+
+                    </span>
+
+
+                    <span class="user-menu-information">
+
+                        <strong>
+                            {{ g.user["name"] }}
+                        </strong>
+
+                        <small>
+                            マイページ
+                        </small>
+
+                    </span>
+
+
+                    <span class="user-menu-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </span>
+
+                </button>
+
+
+                <div id="user-menu-dropdown" class="user-menu-dropdown" hidden>
+
+                    <div class="user-menu-profile">
+
+                        <span class="user-menu-profile-avatar">
+
+                            {% if g.user["name"] %}
+
+                            {{ g.user["name"][0] }}
+
+                            {% else %}
+
+                            U
+
+                            {% endif %}
+
+                        </span>
+
+
+                        <div class="user-menu-profile-information">
+
+                            <strong>
+                                {{ g.user["name"] }}
+                            </strong>
+
+                            <span>
+                                {{ g.user["email"] }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="user-menu-divider"></div>
+
+
+                    <a href="{{ url_for('account') }}" class="user-menu-item">
+
+                        <span class="user-menu-item-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="4"></circle>
+
+                                <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+                            </svg>
+                        </span>
+
+
+                        <span class="user-menu-item-content">
+
+                            <strong>
+                                マイページ
+                            </strong>
+
+                            <small>
+                                名前・メール・パスワードを変更
+                            </small>
+
+                        </span>
+
+                    </a>
+
+
+                    <div class="user-menu-item user-menu-item-disabled" aria-disabled="true">
+
+                        <span class="user-menu-item-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+
+                                <path d="m3 7 9 6 9-6"></path>
+                            </svg>
+                        </span>
+
+
+                        <span class="user-menu-item-content">
+
+                            <strong>
+                                メール連携
+                            </strong>
+
+                            <small>
+                                メールアカウントを接続
+                            </small>
+
+                        </span>
+
+
+                        <span class="user-menu-coming-soon">
+                            準備中
+                        </span>
+
+                    </div>
+
+
+                    <div class="user-menu-item user-menu-item-disabled" aria-disabled="true">
+
+                        <span class="user-menu-item-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+
+                                <path d="M10 21h4"></path>
+                            </svg>
+                        </span>
+
+
+                        <span class="user-menu-item-content">
+
+                            <strong>
+                                通知設定
+                            </strong>
+
+                            <small>
+                                通知方法や表示内容を変更
+                            </small>
+
+                        </span>
+
+
+                        <span class="user-menu-coming-soon">
+                            準備中
+                        </span>
+
+                    </div>
+
+
+                    <div class="user-menu-divider"></div>
+
+
+                    <form method="POST" action="{{ url_for('logout') }}" class="user-menu-logout-form">
+
+                        <button type="submit" class="user-menu-logout-button">
+
+                            <span class="user-menu-item-icon logout" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10 17l5-5-5-5"></path>
+                                    <path d="M15 12H3"></path>
+
+                                    <path d="M15 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"></path>
+                                </svg>
+                            </span>
+
+                            <span>
+                                ログアウト
+                            </span>
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <a href="{{ url_for('login') }}" class="login-header-link">
+                ログイン
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </header>
+
+
+    <main class="dashboard">
+
+        <!-- ページ上部 -->
+
+        <section class="dashboard-heading">
+
+            <div>
+
+                <p class="welcome-label">
+                    JOB HUNTING DASHBOARD
+                </p>
+
+                <h1>
+                    ホーム
+                </h1>
+
+                <p>
+                    今日確認する予定と、現在の選考状況をまとめています。
+                </p>
+
+            </div>
+
+
+            <div class="today-box">
+
+                <span>
+                    TODAY
+                </span>
+
+                {% if today_events %}
+
+                <strong>
+                    今日の予定は{{ today_events|length }}件です
+                </strong>
+
+                <small>
+                    {{ today_events[0]["company_name"] }}
+                    ／
+                    {{ today_events[0]["title"] }}
+                </small>
+
+                {% else %}
+
+                <strong>
+                    今日の予定はありません
+                </strong>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- 状況概要 -->
+
+        <section class="summary-grid">
+
+            <a href="{{ url_for('companies') }}" class="summary-card">
+
+                <div class="summary-icon">
+                    企
+                </div>
+
+                <div class="summary-content">
+
+                    <span>
+                        登録企業
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ company_count }}
+                        </strong>
+
+                        <small>
+                            社
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <span class="summary-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <a href="{{ url_for('companies', filter='selection') }}" class="summary-card">
+
+                <div class="summary-icon">
+                    選
+                </div>
+
+                <div class="summary-content">
+
+                    <span>
+                        選考中
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ selection_count }}
+                        </strong>
+
+                        <small>
+                            社
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <span class="summary-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <a href="{{ url_for('companies', filter='deadline') }}" class="summary-card">
+
+                <div class="summary-icon warning">
+                    期
+                </div>
+
+                <div class="summary-content">
+
+                    <span>
+                        7日以内の締切
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ deadline_count }}
+                        </strong>
+
+                        <small>
+                            件
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <span class="summary-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <a href="{{ url_for('companies', filter='waiting') }}" class="summary-card">
+
+                <div class="summary-icon success">
+                    結
+                </div>
+
+                <div class="summary-content">
+
+                    <span>
+                        結果待ち
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ waiting_count }}
+                        </strong>
+
+                        <small>
+                            社
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <span class="summary-arrow">
+                    →
+                </span>
+
+            </a>
+
+        </section>
+
+
+        <!-- メイン部分 -->
+
+        <section class="dashboard-main">
+
+            <!-- 直近7日間の予定 -->
+
+            <section class="dashboard-panel schedule-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+
+                        <p class="welcome-label">
+                            NEXT 7 DAYS
+                        </p>
+
+                        <h2>
+                            直近7日間の予定
+                        </h2>
+
+                    </div>
+
+                    <a href="{{ url_for('calendar_view') }}">
+                        カレンダーで確認
+                    </a>
+
+                </div>
+
+
+                {% if today_events or upcoming_events %}
+
+                <div class="schedule-list">
+
+                    {% for event in today_events %}
+
+                    <a href="{{ url_for('company_detail', company_id=event['company_id']) }}" class="schedule-item">
+
+                        <div class="schedule-date today">
+
+                            <span>
+                                TODAY
+                            </span>
+
+                            <strong>
+                                今日
+                            </strong>
+
+                        </div>
+
+
+                        <div class="schedule-info">
+
+                            <span class="schedule-company">
+                                {{ event["company_name"] }}
+                            </span>
+
+                            <strong>
+                                {{ event["title"] }}
+                            </strong>
+
+                            <p>
+                                {{ event["event_type"] }}
+                            </p>
+
+                        </div>
+
+
+                        <span class="schedule-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+                    {% endfor %}
+
+
+                    {% for event in upcoming_events %}
+
+                    <a href="{{ url_for('company_detail', company_id=event['company_id']) }}" class="schedule-item">
+
+                        <div class="schedule-date">
+
+                            <span>
+                                {{ event["event_date"][5:7] }}月
+                            </span>
+
+                            <strong>
+                                {{ event["event_date"][8:10] }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="schedule-info">
+
+                            <span class="schedule-company">
+                                {{ event["company_name"] }}
+                            </span>
+
+                            <strong>
+                                {{ event["title"] }}
+                            </strong>
+
+                            <p>
+                                {{ event["event_type"] }}
+                            </p>
+
+                        </div>
+
+
+                        <span class="schedule-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <div class="schedule-empty">
+
+                    <div class="empty-icon">
+                        予
+                    </div>
+
+                    <h3>
+                        直近の予定はありません
+                    </h3>
+
+                    <p>
+                        面接や選考予定を登録すると、ここに表示されます。
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- 優先して確認 -->
+
+            <aside class="dashboard-panel priority-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+
+                        <p class="welcome-label">
+                            PRIORITY
+                        </p>
+
+                        <h2>
+                            優先して確認
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="priority-list">
+
+                    <article class="priority-item">
+
+                        <div class="priority-symbol warning">
+                            期
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                期限が近い提出物
+                            </strong>
+
+                            {% if upcoming_deadlines %}
+
+                            <p>
+                                {{ upcoming_deadlines[0]["name"] }}
+                                の締切は
+                                {{ upcoming_deadlines[0]["deadline"] }}
+                                です。
+                            </p>
+
+                            {% if upcoming_deadlines|length > 1 %}
+
+                            <small>
+                                ほか{{ upcoming_deadlines|length - 1 }}件
+                            </small>
+
+                            {% endif %}
+
+                            {% else %}
+
+                            <p>
+                                現在、期限が近い項目はありません。
+                            </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="priority-item">
+
+                        <div class="priority-symbol">
+                            面
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                次の選考予定
+                            </strong>
+
+                            {% if today_events %}
+
+                            <p>
+                                今日：
+                                {{ today_events[0]["company_name"] }}
+                                ／
+                                {{ today_events[0]["title"] }}
+                            </p>
+
+                            {% elif upcoming_events %}
+
+                            <p>
+                                {{ upcoming_events[0]["event_date"] }}：
+                                {{ upcoming_events[0]["company_name"] }}
+                                ／
+                                {{ upcoming_events[0]["title"] }}
+                            </p>
+
+                            {% else %}
+
+                            <p>
+                                選考予定は登録されていません。
+                            </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="priority-item">
+
+                        <div class="priority-symbol success">
+                            結
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                結果待ち
+                            </strong>
+
+                            {% if waiting_count > 0 %}
+
+                            <p>
+                                現在、{{ waiting_count }}社の結果を待っています。
+                            </p>
+
+                            {% else %}
+
+                            <p>
+                                現在、結果待ちの企業はありません。
+                            </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+        <!-- 選考状況 -->
+
+        <section class="dashboard-panel progress-panel">
+
+            <div class="panel-heading">
+
+                <div>
+
+                    <p class="welcome-label">
+                        SELECTION PROGRESS
+                    </p>
+
+                    <h2>
+                        選考状況
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="selection-progress">
+
+                <article class="progress-step">
+
+                    <span>
+                        01
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            応募準備
+                        </strong>
+
+                        <p>
+                            0社
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <div class="progress-line"></div>
+
+
+                <article class="progress-step">
+
+                    <span>
+                        02
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            ES・適性検査
+                        </strong>
+
+                        <p>
+                            0社
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <div class="progress-line"></div>
+
+
+                <article class="progress-step">
+
+                    <span>
+                        03
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            面接
+                        </strong>
+
+                        <p>
+                            {{ selection_count }}社
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <div class="progress-line"></div>
+
+
+                <article class="progress-step">
+
+                    <span>
+                        04
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            結果待ち
+                        </strong>
+
+                        <p>
+                            {{ waiting_count }}社
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <div class="progress-line"></div>
+
+
+                <article class="progress-step">
+
+                    <span>
+                        05
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            内々定
+                        </strong>
+
+                        <p>
+                            0社
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        const userMenuButton =
+            document.getElementById("user-menu-button");
+
+        const userMenuDropdown =
+            document.getElementById("user-menu-dropdown");
+
+        const notificationButton =
+            document.getElementById("notification-button");
+
+        const notificationDropdown =
+            document.getElementById("notification-dropdown");
+
+
+        function closeUserMenu() {
+            if (!userMenuButton || !userMenuDropdown) {
+                return;
+            }
+
+            userMenuDropdown.hidden = true;
+
+            userMenuButton.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            userMenuButton.classList.remove("is-open");
+        }
+
+
+        function openUserMenu() {
+            if (!userMenuButton || !userMenuDropdown) {
+                return;
+            }
+
+            closeNotificationMenu();
+
+            userMenuDropdown.hidden = false;
+
+            userMenuButton.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+            userMenuButton.classList.add("is-open");
+        }
+
+
+        function closeNotificationMenu() {
+            if (!notificationButton || !notificationDropdown) {
+                return;
+            }
+
+            notificationDropdown.hidden = true;
+
+            notificationButton.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            notificationButton.classList.remove("is-open");
+        }
+
+
+        function openNotificationMenu() {
+            if (!notificationButton || !notificationDropdown) {
+                return;
+            }
+
+            closeUserMenu();
+
+            notificationDropdown.hidden = false;
+
+            notificationButton.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+            notificationButton.classList.add("is-open");
+        }
+
+
+        if (userMenuButton && userMenuDropdown) {
+
+            userMenuButton.addEventListener(
+                "click",
+                function (event) {
+                    event.stopPropagation();
+
+                    const isOpen =
+                        userMenuButton.getAttribute(
+                            "aria-expanded"
+                        ) === "true";
+
+                    if (isOpen) {
+                        closeUserMenu();
+                    } else {
+                        openUserMenu();
+                    }
+                }
+            );
+
+
+            userMenuDropdown.addEventListener(
+                "click",
+                function (event) {
+                    event.stopPropagation();
+                }
+            );
+
+        }
+
+
+        if (notificationButton && notificationDropdown) {
+
+            notificationButton.addEventListener(
+                "click",
+                function (event) {
+                    event.stopPropagation();
+
+                    const isOpen =
+                        notificationButton.getAttribute(
+                            "aria-expanded"
+                        ) === "true";
+
+                    if (isOpen) {
+                        closeNotificationMenu();
+                    } else {
+                        openNotificationMenu();
+                    }
+                }
+            );
+
+
+            notificationDropdown.addEventListener(
+                "click",
+                function (event) {
+                    event.stopPropagation();
+                }
+            );
+
+        }
+
+
+        document.addEventListener(
+            "click",
+            function () {
+                closeUserMenu();
+                closeNotificationMenu();
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+                if (event.key !== "Escape") {
+                    return;
+                }
+
+                closeUserMenu();
+                closeNotificationMenu();
+            }
+        );
+    </script>
+
+</body>
+
+</html>

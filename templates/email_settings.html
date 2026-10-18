@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メール設定 | InternTrack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/email_settings.css') }}">
+</head>
+
+<body>
+
+    {% include "header.html" %}
+
+    <main class="email-settings-page">
+        <section class="page-heading">
+            <div>
+                <p class="page-label">EMAIL ACCOUNTS</p>
+                <h1>メールアカウント設定</h1>
+                <p>就活に使用するメールと、連携したアカウントから取得した最新メールを管理します。</p>
+            </div>
+
+            <div class="gmail-actions">
+                <a href="{{ url_for('google_connect') }}" class="google-connect-button">
+                    Googleアカウントと連携
+                </a>
+
+                <a href="{{ url_for('outlook_connect') }}" class="google-connect-button">
+                    Microsoftアカウントと連携
+                </a>
+
+                <form method="POST" action="{{ url_for('sync_gmail_messages') }}">
+                    <input type="hidden" name="company_only" value="{{ '1' if company_only else '0' }}">
+                    <button type="submit" class="gmail-sync-button">
+                        Gmailメールを取得
+                    </button>
+                </form>
+
+                <form method="POST" action="{{ url_for('sync_outlook_messages') }}">
+                    <input type="hidden" name="company_only" value="{{ '1' if company_only else '0' }}">
+                    <button type="submit" class="gmail-sync-button">
+                        Outlookメールを取得
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        {% if sync_status == "success" %}
+        <div class="sync-message success">
+            メールを{{ sync_count }}件確認しました。
+            {% if sync_event_count|int > 0 %}
+            選考情報を{{ sync_event_count }}件、自動整理しました。日付を検出できた予定はカレンダーに反映されています。
+            {% else %}
+            重複メールは更新されています。
+            {% endif %}
+        </div>
+        {% elif sync_status == "error" %}
+        <div class="sync-message error">
+            メールの取得に失敗しました。{{ sync_error }}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="form-error">{{ error }}</div>
+        {% endif %}
+
+        <section class="notice-card">
+            <div>
+                <strong>Google / Microsoft OAuthで安全に連携します</strong>
+                <p>
+                    Gmail・Outlookのパスワードは保存しません。最新20件を読み取り、登録企業との照合と就活予定の自動抽出に使用します。
+                </p>
+            </div>
+            <span class="connection-count">連携中 {{ email_connected_count }}件</span>
+        </section>
+
+        <section class="settings-grid">
+            <article class="settings-card">
+                <div class="card-heading">
+                    <p class="card-label">ADD ACCOUNT</p>
+                    <h2>メールアドレスを追加</h2>
+                </div>
+
+                <form method="POST" class="email-account-form">
+                    <div class="form-group">
+                        <label for="provider">メールサービス <span>必須</span></label>
+                        <select id="provider" name="provider" required>
+                            <option value="">選択してください</option>
+                            <option value="gmail">Gmail</option>
+                            <option value="outlook">Outlook / Microsoft 365</option>
+                            <option value="yahoo">Yahoo!メール</option>
+                            <option value="icloud">iCloudメール</option>
+                            <option value="imap">大学メール・その他IMAP</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email_address">メールアドレス <span>必須</span></label>
+                        <input type="email" id="email_address" name="email_address" placeholder="example@example.com"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="display_name">表示名</label>
+                        <input type="text" id="display_name" name="display_name" placeholder="例：大学メール">
+                    </div>
+
+                    <div id="imap-fields" class="imap-fields">
+                        <div class="form-group">
+                            <label for="imap_server">IMAPサーバー</label>
+                            <input type="text" id="imap_server" name="imap_server" placeholder="例：imap.example.ac.jp">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imap_port">IMAPポート</label>
+                            <input type="number" id="imap_port" name="imap_port" min="1" max="65535" value="993">
+                        </div>
+
+                        <label class="checkbox-row">
+                            <input type="checkbox" id="use_ssl" name="use_ssl" checked>
+                            <span>SSL/TLSを使用する</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="primary-button">＋ アカウントを登録</button>
+                </form>
+            </article>
+
+            <article class="settings-card account-list-card">
+                <div class="card-heading">
+                    <p class="card-label">REGISTERED ACCOUNTS</p>
+                    <h2>登録済みアカウント</h2>
+                </div>
+
+                {% if accounts %}
+                <div class="account-list">
+                    {% for account in accounts %}
+                    <div class="account-item {% if not account['is_active'] %}is-disabled{% endif %}">
+                        <div class="account-icon">{{ account["email_address"][0]|upper }}</div>
+                        <div class="account-main">
+                            <div class="account-title-row">
+                                <strong>{{ account["display_name"] or account["email_address"] }}</strong>
+                                {% if account["is_active"] %}
+                                <span class="status-badge active">有効</span>
+                                {% else %}
+                                <span class="status-badge disabled">無効</span>
+                                {% endif %}
+                                {% if account["oauth_connected"] %}
+                                <span class="status-badge connected">OAuth接続済み</span>
+                                {% endif %}
+                            </div>
+                            <p>{{ account["email_address"] }}</p>
+                            <span class="provider-text">
+                                {{ account["provider"]|upper }}・{{ "OAuth" if account["auth_type"] == "oauth" else
+                                "IMAP" }}
+                            </span>
+                        </div>
+
+                        <div class="account-actions">
+                            <form method="POST"
+                                action="{{ url_for('toggle_email_account', account_id=account['id']) }}">
+                                <button type="submit" class="secondary-button">
+                                    {{ "無効にする" if account["is_active"] else "有効にする" }}
+                                </button>
+                            </form>
+                            <form method="POST" action="{{ url_for('delete_email_account', account_id=account['id']) }}"
+                                onsubmit="return confirm('このメールアカウント設定を削除しますか？');">
+                                <button type="submit" class="danger-button">削除</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <span>✉</span>
+                    <strong>メールアカウントは未登録です</strong>
+                    <p>Googleアカウントと連携するか、左のフォームから追加してください。</p>
+                </div>
+                {% endif %}
+            </article>
+        </section>
+
+        <section class="gmail-messages-card">
+            <div class="gmail-messages-heading">
+                <div>
+                    <p class="card-label">LATEST EMAIL</p>
+                    <h2>最新メール</h2>
+                </div>
+                <span>最大20件表示</span>
+            </div>
+            <div class="email-provider-tabs">
+                <a href="{{ url_for('email_settings', provider='all', company_only='1' if company_only else '0') }}"
+                    class="{% if selected_provider == 'all' %}active{% endif %}">
+                    すべて
+                </a>
+
+                <a href="{{ url_for('email_settings', provider='gmail', company_only='1' if company_only else '0') }}"
+                    class="{% if selected_provider == 'gmail' %}active{% endif %}">
+                    Gmail
+                </a>
+
+                <a href="{{ url_for('email_settings', provider='outlook', company_only='1' if company_only else '0') }}"
+                    class="{% if selected_provider == 'outlook' %}active{% endif %}">
+                    Outlook
+                </a>
+            </div>
+
+            <div class="email-company-filter">
+                <span class="email-company-filter-label">表示モード</span>
+
+                <a href="{{ url_for(
+                                'email_settings',
+                                provider=selected_provider,
+                                company_only='0'
+                            ) }}"
+                    class="{% if not company_only %}active{% endif %}">
+                    全メール
+                </a>
+
+                <a href="{{ url_for(
+                                'email_settings',
+                                provider=selected_provider,
+                                company_only='1'
+                            ) }}"
+                    class="{% if company_only %}active{% endif %}">
+                    登録企業のみ
+                </a>
+            </div>
+
+            {% if company_only %}
+            <p class="email-company-filter-note">
+                登録企業と紐付かないメールはInternTrack上で非表示になります。メール取得時は、登録企業のメールが20件に達するまで過去の受信メールもさかのぼって確認します（最大500件まで）。Gmail・Outlook本体のメールは削除されません。
+            </p>
+            {% endif %}
+
+            {% if email_messages %}
+            <div class="gmail-message-list">
+                {% for message in email_messages %}
+                <article class="gmail-message-item {% if message['is_unread'] %}is-unread{% endif %}">
+                    <div class="message-status-dot"></div>
+                    <div class="message-main">
+                        <div class="message-top-row">
+                            <strong>{{ message["subject"] or "（件名なし）" }}</strong>
+                            {% if message["received_at"] %}
+                            <time datetime="{{ message['received_at'] }}">
+                                {{ message["received_at"][:16].replace("T", " ") }}
+                            </time>
+                            {% endif %}
+                        </div>
+                        <p class="message-sender">
+                            {{ message["sender"] or "（送信者不明）" }}
+                        </p>
+
+                        <p class="message-snippet">
+                            {{ message["snippet"] or "本文の概要はありません。" }}
+                        </p>
+
+                        <div class="message-footer">
+                            <div class="message-source">
+                                <span class="message-provider-badge {{ message['provider'] }}">
+                                    {{ "Gmail" if message["provider"] == "gmail" else "Outlook" }}
+                                </span>
+                                <small>
+                                    {{ message["email_address"] }}
+                                </small>
+                            </div>
+
+                            {% if message["company_id"] and message["company_name"] %}
+                            <a href="{{ url_for(
+                                            'company_detail',
+                                            company_id=message['company_id']
+                                        ) }}" class="message-company-link">
+                                {{ message["company_name"] }}
+                            </a>
+                            {% else %}
+                            <span class="message-company-unmatched">
+                                未紐付け
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="gmail-empty-state">
+                {% if company_only %}
+                <strong>登録企業に紐付くメールはありません</strong>
+                <p>企業名を登録してからメールを再取得するか、「全メール」に切り替えて確認してください。</p>
+                {% else %}
+                <strong>まだメールを取得していません</strong>
+                <p>GoogleまたはMicrosoftアカウントを連携し、メール取得ボタンを押してください。</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <script>
+        const providerSelect = document.getElementById("provider");
+        const imapFields = document.getElementById("imap-fields");
+        const imapServer = document.getElementById("imap_server");
+        const imapPort = document.getElementById("imap_port");
+
+        const providerSettings = {
+            yahoo: { server: "imap.mail.yahoo.co.jp", port: "993" },
+            icloud: { server: "imap.mail.me.com", port: "993" },
+            imap: { server: "", port: "993" }
+        };
+
+        function updateProviderFields() {
+            const provider = providerSelect.value;
+            const usesImap = ["yahoo", "icloud", "imap"].includes(provider);
+            imapFields.classList.toggle("is-visible", usesImap);
+
+            if (usesImap) {
+                const settings = providerSettings[provider];
+                imapServer.value = settings.server;
+                imapPort.value = settings.port;
+            } else {
+                imapServer.value = "";
+                imapPort.value = "";
+            }
+        }
+
+        providerSelect.addEventListener("change", updateProviderFields);
+        updateProviderFields();
+    </script>
+
+</body>
+
+</html>

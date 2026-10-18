@@ -1,0 +1,248 @@
+/* =========================
+   基本設定
+========================= */
+
+:root {
+    --background: #eef1f6;
+    --surface: #ffffff;
+    --text: #182033;
+    --muted: #657086;
+    --border: #dfe4ec;
+
+    --navy: #17243d;
+    --purple: #6557e8;
+    --purple-dark: #5446d5;
+    --purple-light: #eeecff;
+
+    --green: #168267;
+    --green-light: #e4f5ef;
+
+    --orange: #d86f26;
+    --orange-light: #fff0e4;
+
+    --red: #c94b55;
+    --red-light: #fff0f1;
+
+    --shadow:
+        0 6px 18px rgba(23, 36, 61, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    overflow-y: scroll;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    color: var(--text);
+    background: var(--background);
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Yu Gothic UI",
+        "Yu Gothic",
+        Meiryo,
+        Arial,
+        sans-serif;
+    line-height: 1.5;
+}
+
+a {
+    color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+/* =========================
+   共通ヘッダー
+========================= */
+
+.app-header {
+    width: 100%;
+    height: 74px;
+    padding: 0 28px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 28px;
+    color: white;
+    background: var(--navy);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-self: start;
+    color: white;
+    text-decoration: none;
+}
+
+.brand-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 11px;
+    color: var(--navy);
+    background: white;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.brand-text strong {
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.brand-text span {
+    margin-top: 4px;
+    color: #aeb8ca;
+    font-size: 10px;
+}
+
+
+/* =========================
+   共通ナビゲーション
+========================= */
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.main-nav a {
+    padding: 11px 17px;
+    border-radius: 9px;
+    color: #bdc6d6;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.main-nav a:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.main-nav a.active {
+    color: white;
+    background: var(--purple);
+}
+
+.header-add-button {
+    justify-self: end;
+    padding: 11px 17px;
+    border-radius: 9px;
+    color: var(--navy);
+    background: white;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.header-add-button:hover {
+    background: #edf0f6;
+}
+
+
+/* =========================
+   共通見出し
+========================= */
+
+.welcome-label {
+    margin: 0 0 6px;
+    color: var(--purple);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+}
+
+
+/* =========================
+   共通フォーム部品
+========================= */
+
+input,
+select,
+textarea {
+    color: var(--text);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+}
+
+
+/* =========================
+   タブレット・スマートフォン
+========================= */
+
+@media (max-width: 850px) {
+    .app-header {
+        grid-template-columns: 1fr auto;
+        padding: 0 18px;
+    }
+
+    .main-nav {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {
+    .brand-text span {
+        display: none;
+    }
+
+    .brand-text strong {
+        font-size: 16px;
+    }
+
+    .header-add-button {
+        padding: 10px 12px;
+        font-size: 11px;
+    }
+}
+
+/* =========================
+   画面のずれ防止
+========================= */
+
+html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+}
+
+body {
+    min-height: 100vh;
+}

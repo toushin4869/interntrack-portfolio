@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: interntrack-portfolio-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 1 --bind 0.0.0.0:$PORT app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: INTERNTRACK_DEMO_MODE
+        value: '1'
+      - key: INTERNTRACK_SECRET_KEY
+        generateValue: true

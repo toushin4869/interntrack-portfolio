@@ -1,0 +1,3015 @@
+/* =========================
+   カレンダーページ全体
+========================= */
+
+.calendar-page {
+    width: min(1440px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 24px 0 36px;
+}
+
+.calendar-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 18px;
+}
+
+.calendar-heading h1 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.calendar-heading p:not(.welcome-label) {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.calendar-summary-cards {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.calendar-summary-card {
+    min-width: 112px;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.calendar-summary-card span {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.calendar-summary-card strong {
+    color: var(--purple);
+    font-size: 24px;
+    line-height: 1;
+}
+
+.calendar-summary-card small {
+    margin-left: 3px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.calendar-summary-card.deadline strong {
+    color: var(--red);
+}
+
+.calendar-summary-card.interview strong {
+    color: #0f766e;
+}
+
+/* =========================
+   表示切り替え
+========================= */
+
+.calendar-view-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 16px;
+}
+
+.calendar-view-tabs {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.calendar-view-tab {
+    padding: 9px 15px;
+    border-radius: 9px;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.calendar-view-tab:hover {
+    color: var(--purple);
+    background: var(--purple-light);
+}
+
+.calendar-view-tab.active {
+    color: white;
+    background: var(--purple);
+}
+
+.calendar-view-tab.disabled {
+    color: #b4bcc8;
+    cursor: not-allowed;
+}
+
+.calendar-legend {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: white;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.legend-dot.event {
+    background: var(--purple);
+}
+
+.legend-dot.deadline,
+.legend-dot.holiday {
+    background: var(--red);
+}
+
+/* =========================
+   月表示レイアウト
+========================= */
+
+.calendar-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 16px;
+}
+
+.calendar-panel,
+.monthly-schedule-panel,
+.list-view-panel {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.calendar-panel {
+    min-width: 0;
+}
+
+.calendar-toolbar,
+.list-view-toolbar {
+    min-height: 64px;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.calendar-month-navigation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.calendar-navigation-button {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: #64748b;
+    background: white;
+    text-decoration: none;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.calendar-navigation-button:hover {
+    color: var(--purple);
+    border-color: #c8c2ff;
+    background: var(--purple-light);
+}
+
+.calendar-current-month {
+    min-width: 148px;
+    text-align: center;
+}
+
+.calendar-current-month strong {
+    display: block;
+    color: var(--navy);
+    font-size: 19px;
+}
+
+.calendar-current-month span {
+    display: block;
+    margin-top: 2px;
+    color: #96a0b3;
+    font-size: 9px;
+    font-weight: 900;
+}
+
+.today-button {
+    padding: 9px 13px;
+    border: 1px solid #d8d3ff;
+    border-radius: 9px;
+    color: var(--purple);
+    background: var(--purple-light);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.calendar-weekdays {
+    height: 38px;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    border-bottom: 1px solid var(--border);
+    background: #f8fafc;
+}
+
+.calendar-weekdays div {
+    display: grid;
+    place-items: center;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.calendar-weekdays .saturday {
+    color: #2563eb;
+}
+
+.calendar-weekdays .sunday {
+    color: #dc2626;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(112px, 1fr));
+}
+
+.calendar-day {
+    position: relative;
+    min-width: 0;
+    min-height: 112px;
+    padding: 8px;
+    overflow: hidden;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: white;
+}
+
+.calendar-day:nth-child(7n) {
+    border-right: 0;
+}
+
+.calendar-day:nth-last-child(-n + 7) {
+    border-bottom: 0;
+}
+
+.calendar-day.other-month {
+    background: #f7f8fb;
+}
+
+.calendar-day.saturday {
+    background: #f8fbff;
+}
+
+.calendar-day.sunday,
+.calendar-day.holiday {
+    background: #fffafa;
+}
+
+.calendar-day.other-month.saturday,
+.calendar-day.other-month.sunday,
+.calendar-day.other-month.holiday {
+    background: #f6f7fa;
+}
+
+.calendar-day.today {
+    background: #f5f3ff;
+    box-shadow: inset 0 0 0 2px rgba(101, 87, 232, 0.72);
+}
+
+.calendar-day-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.calendar-day-background:hover {
+    background: rgba(101, 87, 232, 0.035);
+}
+
+.calendar-day-header,
+.calendar-day-items {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.calendar-day-header {
+    min-height: 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.calendar-day-number {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.calendar-day.saturday .calendar-day-number {
+    color: #2563eb;
+}
+
+.calendar-day.sunday .calendar-day-number,
+.calendar-day.holiday .calendar-day-number {
+    color: #dc2626;
+}
+
+.calendar-day.other-month .calendar-day-number {
+    color: #adb5c4;
+}
+
+.calendar-day.today .calendar-day-number {
+    color: white;
+    background: var(--purple);
+}
+
+.calendar-day-labels {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.holiday-name {
+    max-width: 90px;
+    overflow: hidden;
+    color: #dc2626;
+    font-size: 9px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.today-label {
+    color: var(--purple);
+    font-size: 9px;
+    font-weight: 900;
+}
+
+.calendar-day-items {
+    margin-top: 4px;
+    display: grid;
+    gap: 4px;
+}
+
+.calendar-item {
+    min-width: 0;
+    width: 100%;
+    min-height: 29px;
+    padding: 5px 7px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    border: 0;
+    border-radius: 7px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.calendar-item.event {
+    color: #5145cd;
+    background: var(--purple-light);
+}
+
+.calendar-item.deadline {
+    color: #be3642;
+    background: var(--red-light);
+}
+
+.calendar-item:hover {
+    filter: brightness(0.96);
+}
+
+.calendar-item-dot {
+    width: 6px;
+    height: 6px;
+    margin-top: 4px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.calendar-item-text {
+    min-width: 0;
+}
+
+.calendar-item-text strong,
+.calendar-item-text small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.calendar-item-text strong {
+    font-size: 10px;
+    line-height: 1.2;
+}
+
+.calendar-item-text small {
+    margin-top: 2px;
+    font-size: 9px;
+    opacity: 0.82;
+}
+
+.calendar-more-items {
+    width: fit-content;
+    padding: 2px 4px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 9px;
+    font-weight: 900;
+    pointer-events: auto;
+}
+
+.calendar-more-items:hover {
+    color: var(--purple);
+}
+
+/* =========================
+   今月の予定
+========================= */
+
+.monthly-schedule-panel {
+    display: flex;
+    flex-direction: column;
+    max-height: 748px;
+}
+
+.monthly-schedule-heading {
+    min-height: 64px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.monthly-schedule-heading h2 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 16px;
+}
+
+.monthly-schedule-count {
+    min-width: 42px;
+    padding: 6px 9px;
+    border-radius: 999px;
+    color: var(--purple);
+    background: var(--purple-light);
+    text-align: center;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.monthly-schedule-list {
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.monthly-schedule-item {
+    width: 100%;
+    padding: 11px 12px;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 13px;
+    align-items: center;
+    gap: 9px;
+    border: 0;
+    border-bottom: 1px solid #edf0f5;
+    color: inherit;
+    background: white;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.monthly-schedule-item:hover {
+    background: #f8fafc;
+}
+
+.monthly-schedule-date {
+    width: 42px;
+    height: 46px;
+    display: grid;
+    place-content: center;
+    border-radius: 9px;
+    text-align: center;
+}
+
+.monthly-schedule-date.event {
+    color: var(--purple);
+    background: var(--purple-light);
+}
+
+.monthly-schedule-date.deadline {
+    color: var(--red);
+    background: var(--red-light);
+}
+
+.monthly-schedule-date span {
+    font-size: 8px;
+    font-weight: 800;
+}
+
+.monthly-schedule-date strong {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.monthly-schedule-information {
+    min-width: 0;
+}
+
+.monthly-schedule-type {
+    display: inline-block;
+    margin-bottom: 3px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-size: 8px;
+    font-weight: 900;
+}
+
+.monthly-schedule-type.event {
+    color: var(--purple);
+    background: var(--purple-light);
+}
+
+.monthly-schedule-type.deadline {
+    color: var(--red);
+    background: var(--red-light);
+}
+
+.monthly-schedule-information strong,
+.monthly-schedule-information p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.monthly-schedule-information strong {
+    display: block;
+    color: var(--navy);
+    font-size: 11px;
+}
+
+.monthly-schedule-information p {
+    margin: 3px 0 0;
+    color: var(--muted);
+    font-size: 9px;
+}
+
+.monthly-schedule-arrow {
+    color: #9aa4b4;
+    font-size: 18px;
+}
+
+.monthly-schedule-empty,
+.list-view-empty {
+    padding: 48px 24px;
+    display: grid;
+    place-content: center;
+    text-align: center;
+}
+
+.monthly-schedule-empty strong,
+.list-view-empty strong {
+    color: var(--navy);
+    font-size: 14px;
+}
+
+.monthly-schedule-empty p,
+.list-view-empty p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+/* =========================
+   一覧表示
+========================= */
+
+.list-view-panel {
+    min-height: 580px;
+}
+
+.list-view-toolbar {
+    flex-wrap: wrap;
+}
+
+.calendar-filter-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.calendar-search-field input,
+.calendar-type-field select {
+    min-height: 38px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: white;
+    font-size: 11px;
+}
+
+.calendar-search-field input {
+    width: 230px;
+    padding: 9px 11px;
+}
+
+.calendar-type-field select {
+    min-width: 145px;
+    padding: 8px 32px 8px 10px;
+}
+
+.calendar-search-field input:focus,
+.calendar-type-field select:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(101, 87, 232, 0.12);
+}
+
+.calendar-filter-button,
+.calendar-filter-reset,
+.list-add-event-button {
+    min-height: 38px;
+    padding: 9px 13px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.calendar-filter-button {
+    border: 1px solid var(--purple);
+    color: white;
+    background: var(--purple);
+}
+
+.calendar-filter-reset {
+    display: inline-grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    color: #64748b;
+    background: white;
+    text-decoration: none;
+}
+
+.list-view-result-bar {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border-bottom: 1px solid var(--border);
+    background: #f8fafc;
+}
+
+.list-view-result-bar strong {
+    color: var(--navy);
+    font-size: 13px;
+}
+
+.list-view-result-bar span {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.list-add-event-button {
+    margin-left: auto;
+    border: 1px solid #d8d3ff;
+    color: var(--purple);
+    background: var(--purple-light);
+}
+
+.schedule-groups {
+    padding: 18px;
+    display: grid;
+    gap: 20px;
+}
+
+.schedule-group-heading {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.schedule-group-heading h2 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 16px;
+}
+
+.schedule-group-heading span {
+    padding: 3px 8px;
+    border-radius: 999px;
+    color: var(--purple);
+    background: var(--purple-light);
+    font-size: 9px;
+    font-weight: 900;
+}
+
+.schedule-list {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.schedule-list-item {
+    width: 100%;
+    padding: 13px 16px;
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    border: 0;
+    border-bottom: 1px solid #edf0f5;
+    color: inherit;
+    background: white;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.schedule-list-item:last-child {
+    border-bottom: 0;
+}
+
+.schedule-list-item:hover {
+    background: #fafbff;
+}
+
+.schedule-list-date {
+    width: 52px;
+    height: 56px;
+    display: grid;
+    place-content: center;
+    border-radius: 11px;
+    text-align: center;
+}
+
+.schedule-list-date.event {
+    color: var(--purple);
+    background: var(--purple-light);
+}
+
+.schedule-list-date.deadline {
+    color: var(--red);
+    background: var(--red-light);
+}
+
+.schedule-list-date span {
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.schedule-list-date strong {
+    font-size: 21px;
+    line-height: 1;
+}
+
+.schedule-list-main {
+    min-width: 0;
+}
+
+.schedule-list-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.schedule-type-badge {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 900;
+}
+
+.schedule-type-badge.event {
+    color: var(--purple);
+    background: var(--purple-light);
+}
+
+.schedule-type-badge.deadline {
+    color: var(--red);
+    background: var(--red-light);
+}
+
+.schedule-list-meta time {
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.schedule-list-main h3 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 14px;
+}
+
+.schedule-list-main p {
+    margin: 3px 0 0;
+    color: #475569;
+    font-size: 11px;
+}
+
+.schedule-list-main small {
+    display: block;
+    margin-top: 4px;
+    overflow: hidden;
+    color: var(--muted);
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.schedule-list-action {
+    color: var(--purple);
+    font-size: 10px;
+    font-weight: 900;
+}
+
+/* =========================
+   モーダル
+========================= */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.event-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+}
+
+.event-modal[hidden] {
+    display: none;
+}
+
+.event-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(2px);
+}
+
+.event-modal-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(760px, calc(100% - 28px));
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    transform: translate(-50%, -50%);
+    border-radius: 17px;
+    background: white;
+    box-shadow: 0 28px 70px rgba(15, 23, 42, 0.28);
+}
+
+.event-modal-header {
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.event-modal-header h2 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 19px;
+}
+
+.event-modal-close {
+    width: 33px;
+    height: 33px;
+    border: 0;
+    border-radius: 9px;
+    color: #64748b;
+    background: #f1f5f9;
+    font-size: 20px;
+}
+
+.event-form {
+    padding: 18px 20px 20px;
+}
+
+.event-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.event-form-field {
+    display: grid;
+    gap: 6px;
+}
+
+.event-form-field>span {
+    color: #475569;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.event-form-field input,
+.event-form-field select,
+.event-form-field textarea {
+    width: 100%;
+    padding: 10px 11px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: white;
+    font-size: 12px;
+}
+
+.event-form-field input:focus,
+.event-form-field select:focus,
+.event-form-field textarea:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(101, 87, 232, 0.12);
+}
+
+.event-form-field textarea {
+    resize: vertical;
+}
+
+.event-memo-textarea {
+    min-height: 210px;
+    max-height: 380px;
+    padding: 13px 14px;
+    overflow-y: auto;
+    line-height: 1.75;
+    font-family: inherit;
+    font-size: 13px;
+    white-space: pre-wrap;
+}
+
+.event-form-full {
+    grid-column: 1 / -1;
+}
+
+.event-form-actions {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.event-form-main-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 9px;
+}
+
+.cancel-event-button,
+.save-event-button,
+.delete-event-button {
+    padding: 9px 15px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.cancel-event-button {
+    border: 1px solid var(--border);
+    color: #475569;
+    background: white;
+}
+
+.save-event-button {
+    border: 1px solid var(--purple);
+    color: white;
+    background: var(--purple);
+}
+
+.delete-event-button {
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    background: #fff5f5;
+}
+
+.delete-event-form {
+    display: none;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* =========================
+   レスポンシブ
+========================= */
+
+@media (max-width: 1100px) {
+    .calendar-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .monthly-schedule-panel {
+        max-height: 470px;
+    }
+
+    .calendar-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 800px) {
+    .calendar-page {
+        width: calc(100% - 18px);
+    }
+
+    .calendar-view-bar,
+    .list-view-toolbar,
+    .list-view-result-bar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .calendar-legend {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .calendar-panel {
+        overflow-x: auto;
+    }
+
+    .calendar-toolbar,
+    .calendar-weekdays,
+    .calendar-grid {
+        min-width: 860px;
+    }
+
+    .calendar-filter-form {
+        width: 100%;
+    }
+
+    .calendar-search-field,
+    .calendar-search-field input,
+    .calendar-type-field,
+    .calendar-type-field select {
+        width: 100%;
+    }
+
+    .list-add-event-button {
+        margin-left: 0;
+    }
+
+    .schedule-list-item {
+        grid-template-columns: 50px minmax(0, 1fr);
+    }
+
+    .schedule-list-action {
+        display: none;
+    }
+
+    .event-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .event-form-full {
+        grid-column: auto;
+    }
+}
+
+
+/* =========================================================
+   画面内に収めるコンパクト月表示（2026-07-31）
+   ========================================================= */
+
+.compact-calendar-page {
+    width: min(1540px, calc(100% - 28px));
+    height: calc(100vh - 72px);
+    margin: 0 auto;
+    padding: 12px 0 14px;
+    box-sizing: border-box;
+}
+
+.compact-calendar-page .calendar-heading {
+    min-height: 42px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.compact-calendar-page .calendar-title-block h1,
+.compact-calendar-page .calendar-heading h1 {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.compact-calendar-page .calendar-heading p,
+.compact-calendar-page .welcome-label {
+    display: none;
+}
+
+.compact-calendar-page .calendar-summary-cards {
+    gap: 8px;
+}
+
+.compact-calendar-page .calendar-summary-card {
+    min-width: 96px;
+    padding: 7px 11px;
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.compact-calendar-page .calendar-summary-card span {
+    display: inline;
+    margin: 0 7px 0 0;
+    font-size: 10px;
+}
+
+.compact-calendar-page .calendar-summary-card strong {
+    font-size: 18px;
+}
+
+.compact-calendar-page .calendar-summary-card small {
+    font-size: 10px;
+}
+
+.compact-calendar-page .calendar-view-bar {
+    min-height: 38px;
+    margin-bottom: 8px;
+}
+
+.compact-calendar-page .calendar-view-tabs {
+    padding: 3px;
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.compact-calendar-page .calendar-view-tab {
+    padding: 7px 13px;
+    font-size: 11px;
+}
+
+.compact-calendar-page .calendar-legend {
+    display: none;
+}
+
+/* 月表示はカレンダーだけを全面表示 */
+.compact-calendar-page .calendar-layout {
+    display: block;
+    height: calc(100vh - 184px);
+    min-height: 520px;
+}
+
+.compact-calendar-page .calendar-panel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 13px;
+    box-shadow: none;
+}
+
+.compact-calendar-page .monthly-schedule-panel {
+    display: none;
+}
+
+.compact-calendar-page .calendar-toolbar {
+    min-height: 50px;
+    padding: 7px 12px;
+    flex: 0 0 auto;
+}
+
+.compact-calendar-page .calendar-month-navigation {
+    gap: 8px;
+}
+
+.compact-calendar-page .calendar-navigation-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 21px;
+}
+
+.compact-calendar-page .calendar-current-month {
+    min-width: 132px;
+}
+
+.compact-calendar-page .calendar-current-month strong {
+    font-size: 17px;
+}
+
+.compact-calendar-page .calendar-current-month span {
+    display: none;
+}
+
+.compact-calendar-page .today-button {
+    padding: 7px 11px;
+    font-size: 10px;
+}
+
+.compact-calendar-page .calendar-weekdays {
+    height: 30px;
+    flex: 0 0 30px;
+}
+
+.compact-calendar-page .calendar-weekdays div {
+    font-size: 11px;
+}
+
+.compact-calendar-page .calendar-grid {
+    height: auto;
+    min-height: 0;
+    flex: 1 1 auto;
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+    overflow: hidden;
+}
+
+.compact-calendar-page .calendar-day {
+    min-height: 0;
+    padding: 6px 7px 5px;
+}
+
+.compact-calendar-page .calendar-day-header {
+    min-height: 20px;
+    margin-bottom: 3px;
+}
+
+.compact-calendar-page .calendar-day-number {
+    min-width: 23px;
+    height: 23px;
+    padding: 0 5px;
+    font-size: 12px;
+    line-height: 23px;
+}
+
+.compact-calendar-page .holiday-name,
+.compact-calendar-page .today-label {
+    max-width: 90px;
+    font-size: 8px;
+}
+
+.compact-calendar-page .calendar-day-items {
+    gap: 3px;
+}
+
+.compact-calendar-page .calendar-item {
+    min-height: 25px;
+    padding: 3px 6px;
+    border-radius: 6px;
+}
+
+.compact-calendar-page .calendar-item-dot {
+    width: 6px;
+    height: 6px;
+}
+
+.compact-calendar-page .calendar-item-text strong {
+    font-size: 10px;
+    line-height: 1.15;
+}
+
+.compact-calendar-page .calendar-item-text small {
+    margin-top: 1px;
+    font-size: 8px;
+    line-height: 1.1;
+}
+
+.compact-calendar-page .calendar-more-items {
+    padding-left: 5px;
+    font-size: 9px;
+}
+
+/* 一覧表示ではページ内スクロールを許可 */
+.compact-calendar-page .list-view-panel {
+    max-height: calc(100vh - 184px);
+    overflow-y: auto;
+    box-shadow: none;
+}
+
+@media (max-height: 820px) and (min-width: 901px) {
+    .compact-calendar-page {
+        height: calc(100vh - 64px);
+        padding-top: 8px;
+    }
+
+    .compact-calendar-page .calendar-heading {
+        min-height: 34px;
+        margin-bottom: 5px;
+    }
+
+    .compact-calendar-page .calendar-heading h1 {
+        font-size: 21px;
+    }
+
+    .compact-calendar-page .calendar-summary-card {
+        padding: 5px 9px;
+    }
+
+    .compact-calendar-page .calendar-view-bar {
+        min-height: 34px;
+        margin-bottom: 5px;
+    }
+
+    .compact-calendar-page .calendar-layout,
+    .compact-calendar-page .list-view-panel {
+        height: calc(100vh - 154px);
+        max-height: calc(100vh - 154px);
+        min-height: 430px;
+    }
+
+    .compact-calendar-page .calendar-toolbar {
+        min-height: 44px;
+        padding: 5px 10px;
+    }
+
+    .compact-calendar-page .calendar-weekdays {
+        height: 27px;
+        flex-basis: 27px;
+    }
+
+    .compact-calendar-page .calendar-day {
+        padding: 4px 6px;
+    }
+
+    .compact-calendar-page .calendar-day-number {
+        height: 21px;
+        line-height: 21px;
+    }
+
+    .compact-calendar-page .calendar-item {
+        min-height: 21px;
+        padding: 2px 5px;
+    }
+}
+
+@media (max-width: 900px) {
+    .compact-calendar-page {
+        width: min(100% - 20px, 760px);
+        height: auto;
+        padding: 12px 0 24px;
+    }
+
+    .compact-calendar-page .calendar-heading {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .compact-calendar-page .calendar-summary-cards {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .compact-calendar-page .calendar-layout {
+        height: auto;
+        min-height: 0;
+        overflow-x: auto;
+    }
+
+    .compact-calendar-page .calendar-panel {
+        min-width: 760px;
+        height: 690px;
+    }
+
+    .compact-calendar-page .list-view-panel {
+        max-height: none;
+    }
+}
+
+/* =========================================================
+   InternTrack Calendar - Compact Full Screen Layout
+   このコードを calendar.css の一番下に追加してください
+========================================================= */
+
+/* ---------- ページ全体 ---------- */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: #f7f9fc;
+}
+
+.compact-calendar-page {
+    box-sizing: border-box;
+    width: min(1440px, calc(100% - 48px));
+    min-height: calc(100vh - 76px);
+    margin: 0 auto;
+
+    /*
+        上下を同じ余白にする
+    */
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ---------- タイトルと集計 ---------- */
+
+.compact-calendar-page .calendar-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    flex: 0 0 auto;
+    margin: 0 0 8px;
+}
+
+.compact-calendar-page .calendar-title-block h1 {
+    margin: 0;
+    color: #13213a;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+
+/* ---------- 集計カード ---------- */
+
+.compact-calendar-page .calendar-summary-cards {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.compact-calendar-page .calendar-summary-card {
+    box-sizing: border-box;
+    min-width: 96px;
+    height: 42px;
+    padding: 7px 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    background: #ffffff;
+    border: 1px solid #e2e7f0;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(31, 45, 74, 0.05);
+}
+
+.compact-calendar-page .calendar-summary-card span {
+    color: #69758b;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.compact-calendar-page .calendar-summary-card strong {
+    color: #6654ed;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.compact-calendar-page .calendar-summary-card small {
+    color: #7a8497;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.compact-calendar-page .calendar-summary-card.deadline strong {
+    color: #e33d4e;
+}
+
+.compact-calendar-page .calendar-summary-card.interview strong {
+    color: #008d70;
+}
+
+
+/* ---------- 表示切り替えタブ ---------- */
+
+.compact-calendar-page .calendar-view-bar {
+    flex: 0 0 auto;
+    margin: 0 0 8px;
+}
+
+.compact-calendar-page .calendar-view-tabs {
+    width: fit-content;
+    padding: 3px;
+
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    background: #ffffff;
+    border: 1px solid #e2e7f0;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(31, 45, 74, 0.04);
+}
+
+.compact-calendar-page .calendar-view-tab {
+    min-width: 72px;
+    height: 30px;
+    padding: 0 14px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #626d82;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+
+    border: 0;
+    border-radius: 7px;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.compact-calendar-page .calendar-view-tab:hover {
+    color: #5546d8;
+    background: #f3f1ff;
+}
+
+.compact-calendar-page .calendar-view-tab.active {
+    color: #ffffff;
+    background: linear-gradient(135deg,
+            #7057f2 0%,
+            #5c49df 100%);
+    box-shadow: 0 3px 8px rgba(101, 79, 229, 0.28);
+}
+
+.compact-calendar-page .calendar-view-tab.disabled {
+    color: #aab1bf;
+    cursor: default;
+    background: transparent;
+}
+
+
+/* ---------- カレンダー外枠 ---------- */
+
+.compact-calendar-page .calendar-layout {
+    min-height: 0;
+    flex: 1 1 auto;
+
+    display: block;
+}
+
+.compact-calendar-page .calendar-panel {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #dde3ed;
+    border-radius: 14px;
+    box-shadow: 0 7px 24px rgba(31, 45, 74, 0.06);
+}
+
+
+/* ---------- 月切り替えツールバー ---------- */
+
+.compact-calendar-page .calendar-toolbar {
+    box-sizing: border-box;
+    min-height: 44px;
+    padding: 6px 12px;
+
+    flex: 0 0 auto;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+
+    border-bottom: 1px solid #e1e6ef;
+}
+
+.compact-calendar-page .calendar-month-navigation {
+    grid-column: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
+
+.compact-calendar-page .calendar-navigation-button {
+    width: 32px;
+    height: 32px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #26344d;
+    font-size: 23px;
+    line-height: 1;
+    text-decoration: none;
+
+    background: #ffffff;
+    border: 1px solid #dfe5ee;
+    border-radius: 9px;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.compact-calendar-page .calendar-navigation-button:hover {
+    background: #f3f1ff;
+    border-color: #bfb6ff;
+    transform: translateY(-1px);
+}
+
+.compact-calendar-page .calendar-current-month {
+    min-width: 145px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.compact-calendar-page .calendar-current-month strong {
+    color: #17243c;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.compact-calendar-page .calendar-current-month span {
+    display: none;
+}
+
+.compact-calendar-page .today-button {
+    grid-column: 3;
+    justify-self: end;
+
+    height: 30px;
+    padding: 0 13px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #6150df;
+    font-size: 11px;
+    font-weight: 750;
+    text-decoration: none;
+
+    background: #f2efff;
+    border: 1px solid #dcd6ff;
+    border-radius: 8px;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.compact-calendar-page .today-button:hover {
+    background: #eae5ff;
+    transform: translateY(-1px);
+}
+
+
+/* ---------- 曜日 ---------- */
+
+.compact-calendar-page .calendar-weekdays {
+    min-height: 28px;
+    flex: 0 0 28px;
+
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+
+    background: #fbfcfe;
+    border-bottom: 1px solid #dde3ed;
+}
+
+.compact-calendar-page .calendar-weekdays>div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #667287;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.compact-calendar-page .calendar-weekdays .saturday {
+    color: #1d63e9;
+}
+
+.compact-calendar-page .calendar-weekdays .sunday {
+    color: #e33c42;
+}
+
+
+/* ---------- カレンダー本体 ---------- */
+
+.compact-calendar-page .calendar-grid {
+    min-height: 0;
+    flex: 1 1 auto;
+
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+
+    overflow: hidden;
+}
+
+.compact-calendar-page .calendar-day {
+    position: relative;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 0;
+    padding: 7px 8px;
+
+    overflow: hidden;
+    background: #ffffff;
+
+    border-right: 1px solid #e0e5ed;
+    border-bottom: 1px solid #e0e5ed;
+}
+
+.compact-calendar-page .calendar-day:nth-child(7n) {
+    border-right: 0;
+}
+
+.compact-calendar-page .calendar-day:nth-last-child(-n + 7) {
+    border-bottom: 0;
+}
+
+.compact-calendar-page .calendar-day.saturday {
+    background: #f8fbff;
+}
+
+.compact-calendar-page .calendar-day.sunday,
+.compact-calendar-page .calendar-day.holiday {
+    background: #fffafa;
+}
+
+.compact-calendar-page .calendar-day.other-month {
+    background: #f7f8fb;
+}
+
+.compact-calendar-page .calendar-day.today {
+    z-index: 2;
+    background: #faf9ff;
+    box-shadow: inset 0 0 0 2px #6e59ef;
+}
+
+
+/* セル全体をクリックするボタン */
+
+.compact-calendar-page .calendar-day-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    width: 100%;
+    height: 100%;
+    padding: 0;
+
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+}
+
+.compact-calendar-page .calendar-day-background:hover {
+    background: rgba(103, 82, 231, 0.025);
+}
+
+
+/* ---------- 日付 ---------- */
+
+.compact-calendar-page .calendar-day-header {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 6px;
+
+    pointer-events: none;
+}
+
+.compact-calendar-page .calendar-day-number {
+    width: 23px;
+    height: 23px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #17233a;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 800;
+
+    border-radius: 7px;
+}
+
+.compact-calendar-page .calendar-day.saturday .calendar-day-number {
+    color: #1463ec;
+}
+
+.compact-calendar-page .calendar-day.sunday .calendar-day-number,
+.compact-calendar-page .calendar-day.holiday .calendar-day-number {
+    color: #df2733;
+}
+
+.compact-calendar-page .calendar-day.other-month .calendar-day-number {
+    color: #a8b0c0;
+}
+
+.compact-calendar-page .calendar-day.today .calendar-day-number {
+    color: #ffffff;
+    background: #6852e8;
+}
+
+.compact-calendar-page .calendar-day-labels {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.compact-calendar-page .today-label {
+    color: #6852e8;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.compact-calendar-page .holiday-name {
+    max-width: 76px;
+    overflow: hidden;
+
+    color: #df2733;
+    font-size: 9px;
+    font-weight: 750;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/* ---------- 予定 ---------- */
+
+.compact-calendar-page .calendar-day-items {
+    position: relative;
+    z-index: 2;
+
+    min-width: 0;
+    margin-top: 4px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.compact-calendar-page .calendar-item {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    height: 24px;
+    padding: 3px 7px;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    overflow: hidden;
+    cursor: pointer;
+
+    color: #2d3861;
+    text-align: left;
+    text-decoration: none;
+
+    background: #f1efff;
+    border: 1px solid transparent;
+    border-radius: 7px;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.compact-calendar-page .calendar-item:hover {
+    background: #e8e4ff;
+    border-color: #cbc3ff;
+    transform: translateY(-1px);
+}
+
+.compact-calendar-page .calendar-item.deadline {
+    color: #8b2633;
+    background: #fff0f1;
+}
+
+.compact-calendar-page .calendar-item.deadline:hover {
+    background: #ffe5e7;
+    border-color: #f5bdc3;
+}
+
+.compact-calendar-page .calendar-item-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+
+    background: #6650e8;
+    border-radius: 50%;
+}
+
+.compact-calendar-page .calendar-item.deadline .calendar-item-dot {
+    background: #e23b48;
+}
+
+.compact-calendar-page .calendar-item-text {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.compact-calendar-page .calendar-item-text strong {
+    max-width: 62%;
+
+    overflow: hidden;
+
+    color: inherit;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 800;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.compact-calendar-page .calendar-item-text small {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: #7b8296;
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.compact-calendar-page .calendar-more-items {
+    padding-left: 3px;
+
+    color: #6552dd;
+    font-size: 9px;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+
+/* ---------- 一覧表示 ---------- */
+
+.compact-calendar-page .list-view-panel {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+
+    background: #ffffff;
+    border: 1px solid #dde3ed;
+    border-radius: 14px;
+    box-shadow: 0 7px 24px rgba(31, 45, 74, 0.06);
+}
+
+
+/* ---------- 画面高さが小さいPC ---------- */
+
+@media (max-height: 800px) {
+    .compact-calendar-page {
+        width: min(1440px, calc(100% - 36px));
+        min-height: calc(100vh - 70px);
+        padding-top: 14px;
+        padding-bottom: 14px;
+    }
+
+    .compact-calendar-page .calendar-heading {
+        margin-bottom: 6px;
+    }
+
+    .compact-calendar-page .calendar-view-bar {
+        margin-bottom: 6px;
+    }
+
+    .compact-calendar-page .calendar-title-block h1 {
+        font-size: 21px;
+    }
+
+    .compact-calendar-page .calendar-summary-card {
+        height: 36px;
+        min-width: 88px;
+        padding: 5px 9px;
+    }
+
+    .compact-calendar-page .calendar-summary-card strong {
+        font-size: 16px;
+    }
+
+    .compact-calendar-page .calendar-view-tab {
+        height: 27px;
+        font-size: 11px;
+    }
+
+    .compact-calendar-page .calendar-toolbar {
+        min-height: 40px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .compact-calendar-page .calendar-weekdays {
+        min-height: 25px;
+        flex-basis: 25px;
+    }
+
+    .compact-calendar-page .calendar-day {
+        padding: 5px 7px;
+    }
+
+    .compact-calendar-page .calendar-day-number {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+    }
+
+    .compact-calendar-page .calendar-item {
+        height: 21px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+}
+
+
+/* ---------- 横幅が小さい画面 ---------- */
+
+@media (max-width: 900px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .compact-calendar-page {
+        width: calc(100% - 24px);
+        min-height: auto;
+        padding-top: 14px;
+        padding-bottom: 14px;
+    }
+
+    .compact-calendar-page .calendar-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .compact-calendar-page .calendar-summary-cards {
+        width: 100%;
+    }
+
+    .compact-calendar-page .calendar-summary-card {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .compact-calendar-page .calendar-layout {
+        min-height: 600px;
+    }
+
+    .compact-calendar-page .calendar-panel {
+        min-width: 760px;
+    }
+
+    .compact-calendar-page .calendar-layout {
+        overflow-x: auto;
+    }
+}
+
+/* =========================================================
+   InternTrack Calendar List View
+========================================================= */
+
+/* ---------- 一覧表示パネル ---------- */
+
+.compact-calendar-page .list-view-panel {
+    box-sizing: border-box;
+    min-height: 0;
+    flex: 1 1 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #dde3ed;
+    border-radius: 14px;
+    box-shadow: 0 7px 24px rgba(31, 45, 74, 0.06);
+}
+
+
+/* ---------- 上部ツールバー ---------- */
+
+.compact-calendar-page .list-view-toolbar {
+    min-height: 62px;
+    padding: 10px 14px;
+
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    border-bottom: 1px solid #e4e8f0;
+}
+
+.compact-calendar-page .list-view-toolbar .calendar-month-navigation {
+    flex: 0 0 auto;
+}
+
+.compact-calendar-page .calendar-filter-form {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+
+/* ---------- 検索欄 ---------- */
+
+.compact-calendar-page .calendar-search-field {
+    position: relative;
+    display: block;
+}
+
+.compact-calendar-page .calendar-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    z-index: 1;
+
+    color: #818a9d;
+    font-size: 17px;
+    line-height: 1;
+
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+.compact-calendar-page .calendar-search-field input {
+    box-sizing: border-box;
+    width: 230px;
+    height: 36px;
+    padding: 0 13px 0 36px;
+
+    color: #202c42;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    outline: none;
+    background: #f8f9fc;
+    border: 1px solid #dfe4ed;
+    border-radius: 9px;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.compact-calendar-page .calendar-search-field input::placeholder {
+    color: #a1a9b8;
+}
+
+.compact-calendar-page .calendar-search-field input:focus {
+    background: #ffffff;
+    border-color: #8d7cf3;
+    box-shadow: 0 0 0 3px rgba(105, 83, 232, 0.1);
+}
+
+
+/* ---------- 種類選択 ---------- */
+
+.compact-calendar-page .calendar-type-field select {
+    box-sizing: border-box;
+    width: 150px;
+    height: 36px;
+    padding: 0 32px 0 12px;
+
+    color: #344057;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+    outline: none;
+    background-color: #ffffff;
+    border: 1px solid #dfe4ed;
+    border-radius: 9px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.compact-calendar-page .calendar-type-field select:focus {
+    border-color: #8d7cf3;
+    box-shadow: 0 0 0 3px rgba(105, 83, 232, 0.1);
+}
+
+
+/* ---------- 絞り込みボタン ---------- */
+
+.compact-calendar-page .calendar-filter-button {
+    height: 36px;
+    padding: 0 15px;
+
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 750;
+
+    cursor: pointer;
+    background: #6753e8;
+    border: 0;
+    border-radius: 9px;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.compact-calendar-page .calendar-filter-button:hover {
+    background: #5845da;
+    box-shadow: 0 4px 12px rgba(95, 72, 220, 0.2);
+    transform: translateY(-1px);
+}
+
+.compact-calendar-page .calendar-filter-reset {
+    height: 36px;
+    padding: 0 10px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #737d91;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+
+    border-radius: 8px;
+}
+
+.compact-calendar-page .calendar-filter-reset:hover {
+    color: #5544d2;
+    background: #f2f0ff;
+}
+
+
+/* ---------- 件数表示 ---------- */
+
+.compact-calendar-page .list-view-result-bar {
+    min-height: 48px;
+    padding: 7px 16px;
+
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    background: #fbfcfe;
+    border-bottom: 1px solid #e5e9f1;
+}
+
+.compact-calendar-page .list-result-information {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.compact-calendar-page .list-result-information strong {
+    color: #27344c;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.compact-calendar-page .list-result-information span {
+    color: #818a9d;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.compact-calendar-page .list-add-event-button {
+    height: 32px;
+    padding: 0 13px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 750;
+
+    cursor: pointer;
+    background: #6753e8;
+    border: 0;
+    border-radius: 8px;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.compact-calendar-page .list-add-event-button span {
+    font-size: 15px;
+}
+
+.compact-calendar-page .list-add-event-button:hover {
+    background: #5845d8;
+    transform: translateY(-1px);
+}
+
+
+/* ---------- グループ全体 ---------- */
+
+.compact-calendar-page .schedule-groups {
+    min-height: 0;
+    padding: 14px 16px 18px;
+
+    flex: 1 1 auto;
+
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #cfd4df transparent;
+}
+
+.compact-calendar-page .schedule-groups::-webkit-scrollbar {
+    width: 7px;
+}
+
+.compact-calendar-page .schedule-groups::-webkit-scrollbar-thumb {
+    background: #cfd4df;
+    border-radius: 10px;
+}
+
+.compact-calendar-page .schedule-groups::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+/* ---------- 予定グループ ---------- */
+
+.compact-calendar-page .schedule-group+.schedule-group {
+    margin-top: 18px;
+}
+
+.compact-calendar-page .schedule-group-heading {
+    min-height: 31px;
+    margin-bottom: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.compact-calendar-page .schedule-group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.compact-calendar-page .schedule-group-title h2 {
+    margin: 0;
+
+    color: #263249;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.compact-calendar-page .schedule-group-marker {
+    width: 7px;
+    height: 7px;
+
+    background: #8b95a7;
+    border-radius: 50%;
+}
+
+.compact-calendar-page .schedule-group-marker.today {
+    background: #6753e8;
+    box-shadow: 0 0 0 4px rgba(103, 83, 232, 0.1);
+}
+
+.compact-calendar-page .schedule-group-marker.tomorrow {
+    background: #2683ed;
+    box-shadow: 0 0 0 4px rgba(38, 131, 237, 0.1);
+}
+
+.compact-calendar-page .schedule-group-marker.week {
+    background: #00a17a;
+    box-shadow: 0 0 0 4px rgba(0, 161, 122, 0.1);
+}
+
+.compact-calendar-page .schedule-group-marker.future {
+    background: #98a0af;
+    box-shadow: 0 0 0 4px rgba(152, 160, 175, 0.1);
+}
+
+.compact-calendar-page .schedule-group-count {
+    min-width: 38px;
+    height: 23px;
+    padding: 0 8px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #717b8f;
+    font-size: 10px;
+    font-weight: 750;
+
+    background: #f1f3f7;
+    border-radius: 20px;
+}
+
+
+/* ---------- 予定一覧 ---------- */
+
+.compact-calendar-page .schedule-list {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e2e6ee;
+    border-radius: 11px;
+}
+
+.compact-calendar-page .schedule-list-item {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 75px;
+    padding: 10px 14px;
+
+    display: grid;
+    grid-template-columns: 51px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+
+    color: inherit;
+    font-family: inherit;
+    text-align: left;
+    text-decoration: none;
+
+    cursor: pointer;
+    background: #ffffff;
+    border: 0;
+    border-bottom: 1px solid #e8ebf1;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.compact-calendar-page .schedule-list-item:last-child {
+    border-bottom: 0;
+}
+
+.compact-calendar-page .schedule-list-item:hover {
+    position: relative;
+    z-index: 1;
+
+    background: #faf9ff;
+}
+
+.compact-calendar-page button.schedule-list-item {
+    appearance: none;
+}
+
+
+/* ---------- 日付ボックス ---------- */
+
+.compact-calendar-page .schedule-list-date {
+    box-sizing: border-box;
+    width: 51px;
+    height: 51px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #f2f0ff;
+    border: 1px solid #e5e0ff;
+    border-radius: 10px;
+}
+
+.compact-calendar-page .schedule-list-date.deadline {
+    background: #fff0f2;
+    border-color: #ffd9de;
+}
+
+.compact-calendar-page .schedule-list-date span {
+    color: #7564df;
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 750;
+}
+
+.compact-calendar-page .schedule-list-date strong {
+    margin-top: 3px;
+
+    color: #4638b8;
+    font-size: 19px;
+    line-height: 1;
+    font-weight: 850;
+}
+
+.compact-calendar-page .schedule-list-date.deadline span {
+    color: #db4250;
+}
+
+.compact-calendar-page .schedule-list-date.deadline strong {
+    color: #c62d3c;
+}
+
+
+/* ---------- 予定内容 ---------- */
+
+.compact-calendar-page .schedule-list-main {
+    min-width: 0;
+}
+
+.compact-calendar-page .schedule-list-meta {
+    margin-bottom: 4px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.compact-calendar-page .schedule-list-meta time {
+    color: #929aab;
+    font-size: 9px;
+    font-weight: 650;
+}
+
+.compact-calendar-page .schedule-type-badge {
+    min-height: 20px;
+    padding: 0 8px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #5a4acf;
+    font-size: 9px;
+    font-weight: 800;
+
+    background: #efedff;
+    border-radius: 20px;
+}
+
+.compact-calendar-page .schedule-type-badge.deadline {
+    color: #cf2f3e;
+    background: #ffe9ec;
+}
+
+.compact-calendar-page .schedule-type-badge.interview {
+    color: #087a61;
+    background: #e2f7f0;
+}
+
+.compact-calendar-page .schedule-type-badge.es {
+    color: #5643cf;
+    background: #eeeaff;
+}
+
+.compact-calendar-page .schedule-type-badge.seminar {
+    color: #1767ba;
+    background: #e8f3ff;
+}
+
+.compact-calendar-page .schedule-type-badge.test {
+    color: #aa6518;
+    background: #fff1df;
+}
+
+.compact-calendar-page .schedule-type-badge.internship {
+    color: #9b4a11;
+    background: #ffeadc;
+}
+
+.compact-calendar-page .schedule-list-main h3 {
+    max-width: 100%;
+    margin: 0;
+
+    overflow: hidden;
+
+    color: #202c42;
+    font-size: 13px;
+    line-height: 1.3;
+    font-weight: 800;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.compact-calendar-page .schedule-list-main p {
+    max-width: 100%;
+    margin: 2px 0 0;
+
+    overflow: hidden;
+
+    color: #58647a;
+    font-size: 11px;
+    line-height: 1.35;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.compact-calendar-page .schedule-list-memo {
+    max-width: 100%;
+    margin-top: 3px;
+
+    display: block;
+    overflow: hidden;
+
+    color: #929aab;
+    font-size: 9px;
+    line-height: 1.3;
+    font-weight: 550;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/* ---------- 右側の操作 ---------- */
+
+.compact-calendar-page .schedule-list-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    color: #8b93a3;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.compact-calendar-page .schedule-list-action strong {
+    color: #7060de;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.compact-calendar-page .schedule-list-item:hover .schedule-list-action {
+    color: #6554dd;
+}
+
+
+/* ---------- 予定がない場合 ---------- */
+
+.compact-calendar-page .list-view-empty {
+    min-height: 0;
+    padding: 40px 20px;
+
+    flex: 1 1 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.compact-calendar-page .list-empty-icon {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #7563e6;
+    font-size: 28px;
+
+    background: #f0eeff;
+    border-radius: 50%;
+}
+
+.compact-calendar-page .list-view-empty>strong {
+    color: #253149;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.compact-calendar-page .list-view-empty>p {
+    margin: 7px 0 16px;
+
+    color: #838c9d;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.compact-calendar-page .list-empty-reset-button,
+.compact-calendar-page .list-empty-add-button {
+    height: 34px;
+    padding: 0 15px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 750;
+    text-decoration: none;
+
+    cursor: pointer;
+    background: #6753e8;
+    border: 0;
+    border-radius: 9px;
+}
+
+.compact-calendar-page .list-empty-reset-button:hover,
+.compact-calendar-page .list-empty-add-button:hover {
+    background: #5845d8;
+}
+
+
+/* ---------- スクリーンリーダー用 ---------- */
+
+.visually-hidden {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+
+    overflow: hidden;
+    white-space: nowrap;
+
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+}
+
+
+/* ---------- 画面の高さが小さい場合 ---------- */
+
+@media (max-height: 800px) {
+    .compact-calendar-page .list-view-toolbar {
+        min-height: 54px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    .compact-calendar-page .list-view-result-bar {
+        min-height: 42px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .compact-calendar-page .schedule-groups {
+        padding-top: 10px;
+        padding-bottom: 12px;
+    }
+
+    .compact-calendar-page .schedule-group+.schedule-group {
+        margin-top: 13px;
+    }
+
+    .compact-calendar-page .schedule-list-item {
+        min-height: 65px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    .compact-calendar-page .schedule-list-date {
+        width: 45px;
+        height: 45px;
+    }
+
+    .compact-calendar-page .schedule-list-date strong {
+        font-size: 17px;
+    }
+}
+
+
+/* ---------- タブレット・小さい画面 ---------- */
+
+@media (max-width: 1000px) {
+    .compact-calendar-page .list-view-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .compact-calendar-page .list-view-toolbar .calendar-month-navigation {
+        align-self: center;
+    }
+
+    .compact-calendar-page .calendar-filter-form {
+        width: 100%;
+    }
+
+    .compact-calendar-page .calendar-search-field {
+        flex: 1;
+    }
+
+    .compact-calendar-page .calendar-search-field input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    .compact-calendar-page .calendar-filter-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .compact-calendar-page .calendar-type-field select,
+    .compact-calendar-page .calendar-filter-button {
+        width: 100%;
+    }
+
+    .compact-calendar-page .list-view-result-bar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .compact-calendar-page .schedule-list-item {
+        grid-template-columns: 46px minmax(0, 1fr);
+    }
+
+    .compact-calendar-page .schedule-list-action {
+        display: none;
+    }
+}
+
+/* =========================
+   カレンダー位置の固定
+========================= */
+
+.compact-calendar-page {
+    min-height: calc(100vh - 74px);
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.calendar-page {
+    padding-bottom: 40px;
+}
+
+.calendar-wrapper {
+    min-height: 760px;
+}
+
+/* =========================================================
+   カレンダーページの微小な縦スクロールを完全に防止
+========================================================= */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    min-height: 0;
+}
+
+.compact-calendar-page {
+    box-sizing: border-box;
+
+    width: min(1440px, calc(100% - 48px));
+    height: calc(100vh - 74px);
+    min-height: 0 !important;
+
+    margin: 0 auto;
+
+    /* 上下余白 */
+    padding: 18px 0 30px;
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.compact-calendar-page .calendar-heading,
+.compact-calendar-page .calendar-view-bar {
+    flex: 0 0 auto;
+}
+
+.compact-calendar-page .calendar-layout {
+    min-height: 0;
+    flex: 1 1 auto;
+
+    padding-bottom: 8px;
+
+    overflow: hidden;
+}
+
+.compact-calendar-page .calendar-panel {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.compact-calendar-page .calendar-grid {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+}

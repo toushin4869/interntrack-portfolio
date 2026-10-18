@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>マイページ | InternTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/common.css') }}"
+    >
+
+    <style>
+        /* =========================================================
+           基本
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+
+            background: #f5f7fb;
+            color: #172033;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                "Noto Sans JP",
+                "Hiragino Kaku Gothic ProN",
+                Meiryo,
+                sans-serif;
+        }
+
+
+        button,
+        input {
+            font: inherit;
+        }
+
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        /* =========================================================
+           ヘッダー
+        ========================================================= */
+
+        .account-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+
+            min-height: 72px;
+            padding: 0 34px;
+
+            border-bottom: 1px solid #e4e9f2;
+
+            background:
+                rgba(255, 255, 255, 0.94);
+
+            backdrop-filter: blur(12px);
+        }
+
+
+        .account-brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            color: #172033;
+            text-decoration: none;
+        }
+
+
+        .account-brand-icon {
+            display: grid;
+            place-items: center;
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #4f46e5
+                );
+
+            color: #ffffff;
+
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+
+            box-shadow:
+                0 8px 20px
+                rgba(37, 99, 235, 0.22);
+        }
+
+
+        .account-brand-text {
+            display: grid;
+            gap: 1px;
+        }
+
+
+        .account-brand-text strong {
+            font-size: 16px;
+            letter-spacing: -0.02em;
+        }
+
+
+        .account-brand-text span {
+            color: #7b879b;
+            font-size: 11px;
+        }
+
+
+        .header-home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            min-height: 42px;
+            padding: 0 15px;
+
+            border: 1px solid #dce3ed;
+            border-radius: 11px;
+
+            background: #ffffff;
+            color: #40506a;
+
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+
+            transition:
+                border-color 0.15s ease,
+                background-color 0.15s ease,
+                color 0.15s ease,
+                transform 0.15s ease;
+        }
+
+
+        .header-home-link:hover {
+            border-color: #c8d2df;
+            background: #f8fafc;
+            color: #172033;
+        }
+
+
+        .header-home-link:active {
+            transform: translateY(1px);
+        }
+
+
+        .header-home-link svg {
+            width: 17px;
+            height: 17px;
+        }
+
+
+        /* =========================================================
+           ページ
+        ========================================================= */
+
+        .account-page {
+            width: min(1120px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 46px 0 80px;
+        }
+
+
+        .account-page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 30px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .account-page-label {
+            margin: 0 0 8px;
+
+            color: #2563eb;
+
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.15em;
+        }
+
+
+        .account-page-heading h1 {
+            margin: 0;
+
+            color: #111827;
+
+            font-size: clamp(28px, 4vw, 38px);
+            letter-spacing: -0.04em;
+        }
+
+
+        .account-page-description {
+            margin: 10px 0 0;
+
+            color: #6b778c;
+
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+
+        .account-heading-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            min-width: 260px;
+            padding: 14px 17px;
+
+            border: 1px solid #e1e7f0;
+            border-radius: 16px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 10px 30px
+                rgba(34, 46, 70, 0.05);
+        }
+
+
+        .account-heading-avatar {
+            display: grid;
+            place-items: center;
+
+            width: 45px;
+            height: 45px;
+
+            flex-shrink: 0;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #4f46e5
+                );
+
+            color: #ffffff;
+
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+
+        .account-heading-profile div {
+            min-width: 0;
+        }
+
+
+        .account-heading-profile strong {
+            display: block;
+
+            overflow: hidden;
+
+            color: #172033;
+
+            font-size: 14px;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+
+        .account-heading-profile span {
+            display: block;
+
+            margin-top: 3px;
+
+            overflow: hidden;
+
+            color: #7b879b;
+
+            font-size: 12px;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           メッセージ
+        ========================================================= */
+
+        .account-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+
+            margin-bottom: 22px;
+            padding: 14px 16px;
+
+            border-radius: 13px;
+
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.7;
+        }
+
+
+        .account-message svg {
+            width: 19px;
+            height: 19px;
+
+            flex-shrink: 0;
+
+            margin-top: 1px;
+        }
+
+
+        .account-message-error {
+            border: 1px solid #fecaca;
+
+            background: #fff5f5;
+            color: #b42318;
+        }
+
+
+        .account-message-success {
+            border: 1px solid #bbf7d0;
+
+            background: #f2fff6;
+            color: #16794b;
+        }
+
+
+        /* =========================================================
+           レイアウト
+        ========================================================= */
+
+        .account-layout {
+            display: grid;
+            grid-template-columns:
+                minmax(0, 1fr)
+                300px;
+            align-items: start;
+            gap: 24px;
+        }
+
+
+        .account-main-column {
+            display: grid;
+            gap: 22px;
+        }
+
+
+        .account-side-column {
+            display: grid;
+            gap: 22px;
+        }
+
+
+        /* =========================================================
+           カード
+        ========================================================= */
+
+        .account-card {
+            overflow: hidden;
+
+            border: 1px solid #e1e7f0;
+            border-radius: 19px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 14px 38px
+                rgba(31, 44, 68, 0.055);
+        }
+
+
+        .account-card-heading {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+
+            padding: 23px 25px;
+
+            border-bottom: 1px solid #edf0f5;
+        }
+
+
+        .account-card-heading-icon {
+            display: grid;
+            place-items: center;
+
+            width: 40px;
+            height: 40px;
+
+            flex-shrink: 0;
+
+            border: 1px solid #dce6ff;
+            border-radius: 12px;
+
+            background: #f3f6ff;
+            color: #3d5dde;
+        }
+
+
+        .account-card-heading-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+
+        .account-card-heading h2 {
+            margin: 0;
+
+            color: #172033;
+
+            font-size: 17px;
+            letter-spacing: -0.02em;
+        }
+
+
+        .account-card-heading p {
+            margin: 5px 0 0;
+
+            color: #7b879b;
+
+            font-size: 12px;
+            line-height: 1.65;
+        }
+
+
+        .account-card-body {
+            padding: 25px;
+        }
+
+
+        /* =========================================================
+           フォーム
+        ========================================================= */
+
+        .account-form {
+            display: grid;
+            gap: 20px;
+        }
+
+
+        .form-field {
+            display: grid;
+            gap: 8px;
+        }
+
+
+        .form-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+
+        .form-label-row label {
+            color: #334155;
+
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+
+        .form-label-row span {
+            color: #98a2b3;
+            font-size: 10px;
+        }
+
+
+        .form-input {
+            width: 100%;
+            min-height: 48px;
+
+            padding: 11px 14px;
+
+            border: 1px solid #d6deea;
+            border-radius: 11px;
+
+            background: #ffffff;
+            color: #172033;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease,
+                background-color 0.15s ease;
+        }
+
+
+        .form-input:hover {
+            border-color: #bac6d6;
+        }
+
+
+        .form-input:focus {
+            border-color: #4f6ee8;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(79, 110, 232, 0.12);
+        }
+
+
+        .form-input::placeholder {
+            color: #a5afbd;
+        }
+
+
+        .form-help {
+            margin: 0;
+
+            color: #8490a3;
+
+            font-size: 11px;
+            line-height: 1.65;
+        }
+
+
+        .password-field-wrapper {
+            position: relative;
+        }
+
+
+        .password-field-wrapper .form-input {
+            padding-right: 48px;
+        }
+
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 8px;
+
+            display: grid;
+            place-items: center;
+
+            width: 34px;
+            height: 34px;
+
+            padding: 0;
+
+            border: 0;
+            border-radius: 9px;
+
+            background: transparent;
+            color: #8490a3;
+
+            cursor: pointer;
+
+            transform: translateY(-50%);
+
+            transition:
+                background-color 0.15s ease,
+                color 0.15s ease;
+        }
+
+
+        .password-toggle:hover {
+            background: #f0f3f8;
+            color: #40506a;
+        }
+
+
+        .password-toggle svg {
+            width: 18px;
+            height: 18px;
+        }
+
+
+        .password-toggle .eye-off-icon {
+            display: none;
+        }
+
+
+        .password-toggle.is-visible .eye-icon {
+            display: none;
+        }
+
+
+        .password-toggle.is-visible .eye-off-icon {
+            display: block;
+        }
+
+
+        .form-submit-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            padding-top: 2px;
+        }
+
+
+        .account-save-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            min-height: 43px;
+            padding: 0 17px;
+
+            border: 0;
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #4f46e5
+                );
+
+            color: #ffffff;
+
+            font-size: 13px;
+            font-weight: 900;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 18px
+                rgba(37, 99, 235, 0.19);
+
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.15s ease,
+                filter 0.15s ease;
+        }
+
+
+        .account-save-button:hover {
+            filter: brightness(1.03);
+
+            box-shadow:
+                0 10px 22px
+                rgba(37, 99, 235, 0.24);
+        }
+
+
+        .account-save-button:active {
+            transform: translateY(1px);
+        }
+
+
+        .account-save-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+
+        /* =========================================================
+           アカウント情報
+        ========================================================= */
+
+        .account-information-list {
+            display: grid;
+        }
+
+
+        .account-information-row {
+            display: grid;
+            gap: 5px;
+
+            padding: 16px 0;
+
+            border-bottom: 1px solid #edf0f5;
+        }
+
+
+        .account-information-row:first-child {
+            padding-top: 0;
+        }
+
+
+        .account-information-row:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+
+        .account-information-row span {
+            color: #8a96a8;
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+
+        .account-information-row strong {
+            overflow-wrap: anywhere;
+
+            color: #2b374b;
+
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           セキュリティ案内
+        ========================================================= */
+
+        .security-information {
+            display: grid;
+            gap: 14px;
+        }
+
+
+        .security-information-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+
+        .security-information-item svg {
+            width: 17px;
+            height: 17px;
+
+            flex-shrink: 0;
+
+            margin-top: 1px;
+
+            color: #5c6e87;
+        }
+
+
+        .security-information-item p {
+            margin: 0;
+
+            color: #6f7d91;
+
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+
+        /* =========================================================
+           ログアウト
+        ========================================================= */
+
+        .logout-card .account-card-body {
+            display: grid;
+            gap: 15px;
+        }
+
+
+        .logout-description {
+            margin: 0;
+
+            color: #7b879b;
+
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+
+        .logout-form {
+            margin: 0;
+        }
+
+
+        .logout-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            width: 100%;
+            min-height: 43px;
+
+            border: 1px solid #f0caca;
+            border-radius: 10px;
+
+            background: #fffafa;
+            color: #c83d3d;
+
+            font-size: 13px;
+            font-weight: 900;
+
+            cursor: pointer;
+
+            transition:
+                border-color 0.15s ease,
+                background-color 0.15s ease,
+                transform 0.15s ease;
+        }
+
+
+        .logout-button:hover {
+            border-color: #eba9a9;
+            background: #fff1f1;
+        }
+
+
+        .logout-button:active {
+            transform: translateY(1px);
+        }
+
+
+        .logout-button svg {
+            width: 17px;
+            height: 17px;
+        }
+
+
+        /* =========================================================
+           レスポンシブ
+        ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .account-layout {
+                grid-template-columns: 1fr;
+            }
+
+
+            .account-side-column {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+        }
+
+
+        @media (max-width: 680px) {
+
+            .account-header {
+                min-height: 64px;
+                padding: 0 16px;
+            }
+
+
+            .account-brand-text span {
+                display: none;
+            }
+
+
+            .header-home-link {
+                width: 42px;
+                min-height: 42px;
+                padding: 0;
+
+                justify-content: center;
+            }
+
+
+            .header-home-link span {
+                display: none;
+            }
+
+
+            .account-page {
+                width: min(100% - 26px, 1120px);
+                padding: 30px 0 55px;
+            }
+
+
+            .account-page-heading {
+                display: grid;
+                align-items: start;
+            }
+
+
+            .account-heading-profile {
+                width: 100%;
+                min-width: 0;
+            }
+
+
+            .account-card-heading {
+                padding: 20px;
+            }
+
+
+            .account-card-body {
+                padding: 20px;
+            }
+
+
+            .account-side-column {
+                grid-template-columns: 1fr;
+            }
+
+
+            .form-submit-row {
+                justify-content: stretch;
+            }
+
+
+            .account-save-button {
+                width: 100%;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="account-header">
+
+        <a
+            href="{{ url_for('index') }}"
+            class="account-brand"
+        >
+            <span class="account-brand-icon">
+                IT
+            </span>
+
+            <span class="account-brand-text">
+                <strong>InternTrack</strong>
+                <span>就活管理アプリ</span>
+            </span>
+        </a>
+
+
+        <a
+            href="{{ url_for('index') }}"
+            class="header-home-link"
+        >
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="m3 11 9-8 9 8"></path>
+                <path d="M5 10v10h14V10"></path>
+                <path d="M9 20v-6h6v6"></path>
+            </svg>
+
+            <span>ホームへ戻る</span>
+        </a>
+
+    </header>
+
+
+    <main class="account-page">
+
+        <section class="account-page-heading">
+
+            <div>
+                <p class="account-page-label">
+                    ACCOUNT SETTINGS
+                </p>
+
+                <h1>
+                    マイページ
+                </h1>
+
+                <p class="account-page-description">
+                    アカウント情報やログイン情報を確認・変更できます。
+                </p>
+            </div>
+
+
+            <div class="account-heading-profile">
+
+                <span class="account-heading-avatar">
+                    {% if user["name"] %}
+                        {{ user["name"][0] }}
+                    {% else %}
+                        U
+                    {% endif %}
+                </span>
+
+                <div>
+                    <strong>
+                        {{ user["name"] }}
+                    </strong>
+
+                    <span>
+                        {{ user["email"] }}
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {% if error %}
+
+        <div class="account-message account-message-error">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 8v5"></path>
+                <path d="M12 17h.01"></path>
+            </svg>
+
+            <span>
+                {{ error }}
+            </span>
+
+        </div>
+
+        {% endif %}
+
+
+        {% if success %}
+
+        <div class="account-message account-message-success">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="m8 12 2.5 2.5L16 9"></path>
+            </svg>
+
+            <span>
+                {{ success }}
+            </span>
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="account-layout">
+
+            <div class="account-main-column">
+
+                <!-- 名前変更 -->
+
+                <section class="account-card">
+
+                    <div class="account-card-heading">
+
+                        <span class="account-card-heading-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+                            </svg>
+
+                        </span>
+
+                        <div>
+                            <h2>プロフィール</h2>
+
+                            <p>
+                                InternTrack上に表示される名前を変更できます。
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="account-card-body">
+
+                        <form
+                            method="POST"
+                            class="account-form"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="update_name"
+                            >
+
+                            <div class="form-field">
+
+                                <div class="form-label-row">
+
+                                    <label for="account-name">
+                                        名前
+                                    </label>
+
+                                    <span>
+                                        100文字以内
+                                    </span>
+
+                                </div>
+
+                                <input
+                                    type="text"
+                                    id="account-name"
+                                    name="name"
+                                    class="form-input"
+                                    value="{{ user['name'] }}"
+                                    maxlength="100"
+                                    autocomplete="name"
+                                    required
+                                >
+
+                                <p class="form-help">
+                                    ヘッダーやマイページなどに表示されます。
+                                </p>
+
+                            </div>
+
+
+                            <div class="form-submit-row">
+
+                                <button
+                                    type="submit"
+                                    class="account-save-button"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M5 12l4 4L19 6"></path>
+                                    </svg>
+
+                                    名前を保存
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </section>
+
+
+                <!-- メールアドレス変更 -->
+
+                <section class="account-card">
+
+                    <div class="account-card-heading">
+
+                        <span class="account-card-heading-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="14"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="m3 7 9 6 9-6"></path>
+                            </svg>
+
+                        </span>
+
+                        <div>
+                            <h2>メールアドレス</h2>
+
+                            <p>
+                                ログインに使用するメールアドレスを変更できます。
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="account-card-body">
+
+                        <form
+                            method="POST"
+                            class="account-form"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="update_email"
+                            >
+
+
+                            <div class="form-field">
+
+                                <div class="form-label-row">
+
+                                    <label for="account-email">
+                                        新しいメールアドレス
+                                    </label>
+
+                                </div>
+
+                                <input
+                                    type="email"
+                                    id="account-email"
+                                    name="email"
+                                    class="form-input"
+                                    value="{{ user['email'] }}"
+                                    autocomplete="email"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <div class="form-label-row">
+
+                                    <label for="email-current-password">
+                                        現在のパスワード
+                                    </label>
+
+                                    <span>
+                                        本人確認
+                                    </span>
+
+                                </div>
+
+                                <div class="password-field-wrapper">
+
+                                    <input
+                                        type="password"
+                                        id="email-current-password"
+                                        name="current_password"
+                                        class="form-input"
+                                        autocomplete="current-password"
+                                        required
+                                    >
+
+                                    <button
+                                        type="button"
+                                        class="password-toggle"
+                                        data-target="email-current-password"
+                                        aria-label="パスワードを表示"
+                                        title="パスワードを表示"
+                                    >
+                                        <svg
+                                            class="eye-icon"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6"
+                                            ></path>
+
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="2.5"
+                                            ></circle>
+                                        </svg>
+
+                                        <svg
+                                            class="eye-off-icon"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="m3 3 18 18"></path>
+
+                                            <path
+                                                d="M10.6 6.2A9.8 9.8 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-2.1 2.8"
+                                            ></path>
+
+                                            <path
+                                                d="M6.2 6.2A16.2 16.2 0 0 0 2.5 12s3.5 6 9.5 6a9.8 9.8 0 0 0 4.1-.9"
+                                            ></path>
+
+                                            <path
+                                                d="M9.9 9.9a3 3 0 0 0 4.2 4.2"
+                                            ></path>
+                                        </svg>
+                                    </button>
+
+                                </div>
+
+                                <p class="form-help">
+                                    セキュリティ保護のため、現在のパスワードが必要です。
+                                </p>
+
+                            </div>
+
+
+                            <div class="form-submit-row">
+
+                                <button
+                                    type="submit"
+                                    class="account-save-button"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M5 12l4 4L19 6"></path>
+                                    </svg>
+
+                                    メールアドレスを保存
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </section>
+
+
+                <!-- パスワード変更 -->
+
+                <section class="account-card">
+
+                    <div class="account-card-heading">
+
+                        <span class="account-card-heading-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <rect
+                                    x="4"
+                                    y="10"
+                                    width="16"
+                                    height="11"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                                <path d="M12 14v3"></path>
+                            </svg>
+
+                        </span>
+
+                        <div>
+                            <h2>パスワード</h2>
+
+                            <p>
+                                アカウントを保護するパスワードを変更できます。
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="account-card-body">
+
+                        <form
+                            method="POST"
+                            class="account-form"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="update_password"
+                            >
+
+
+                            <div class="form-field">
+
+                                <div class="form-label-row">
+
+                                    <label for="password-current">
+                                        現在のパスワード
+                                    </label>
+
+                                </div>
+
+                                <div class="password-field-wrapper">
+
+                                    <input
+                                        type="password"
+                                        id="password-current"
+                                        name="current_password"
+                                        class="form-input"
+                                        autocomplete="current-password"
+                                        required
+                                    >
+
+                                    <button
+                                        type="button"
+                                        class="password-toggle"
+                                        data-target="password-current"
+                                        aria-label="パスワードを表示"
+                                        title="パスワードを表示"
+                                    >
+                                        <svg
+                                            class="eye-icon"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6"
+                                            ></path>
+
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="2.5"
+                                            ></circle>
+                                        </svg>
+
+                                        <svg
+                                            class="eye-off-icon"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="m3 3 18 18"></path>
+
+                                            <path
+                                                d="M10.6 6.2A9.8 9.8 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-2.1 2.8"
+                                            ></path>
+
+                                            <path
+                                                d="M6.2 6.2A16.2 16.2 0 0 0 2.5 12s3.5 6 9.5 6a9.8 9.8 0 0 0 4.1-.9"
+                                            ></path>
+
+                                            <path
+                                                d="M9.9 9.9a3 3 0 0 0 4.2 4.2"
+                                            ></path>
+                                        </svg>
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <div class="form-label-row">
+
+                                    <label for="password-new">
+                                        新しいパスワード
+                                    </label>
+
+                                    <span>
+                                        8文字以上
+                                    </span>
+
+                                </div>
+
+                                <div class="password-field-wrapper">
+
+                                    <input
+                                        type="password"
+                                        id="password-new"
+                                        name="new_password"
+                                        class="form-input"
+                                        minlength="8"
+                                        autocomplete="new-password"
+                                        placeholder="8文字以上で入力"
+                                        required
+                                    >
+
+                                    <button
+                                        type="button"
+                                        class="password-toggle"
+                                        data-target="password-new"
+                                        aria-label="パスワードを表示"
+                                        title="パスワードを表示"
+                                    >
+                                        <svg
+                                            class="eye-icon"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6"
+                                            ></path>
+
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="2.5"
+                                            ></circle>
+                                        </svg>
+
+                                        <svg
+                                            class="eye-off-icon"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="m3 3 18 18"></path>
+
+                                            <path
+                                                d="M10.6 6.2A9.8 9.8 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-2.1 2.8"
+                                            ></path>
+
+                                            <path
+                                                d="M6.2 6.2A16.2 16.2 0 0 0 2.5 12s3.5 6 9.5 6a9.8 9.8 0 0 0 4.1-.9"
+                                            ></path>
+
+                                            <path
+                                                d="M9.9 9.9a3 3 0 0 0 4.2 4.2"
+                                            ></path>
+                                        </svg>
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <div class="form-label-row">
+
+                                    <label for="password-new-confirm">
+                                        新しいパスワード（確認）
+                                    </label>
+
+                                </div>
+
+                                <div class="password-field-wrapper">
+
+                                    <input
+                                        type="password"
+                                        id="password-new-confirm"
+                                        name="new_password_confirm"
+                                        class="form-input"
+                                        minlength="8"
+                                        autocomplete="new-password"
+                                        required
+                                    >
+
+                                    <button
+                                        type="button"
+                                        class="password-toggle"
+                                        data-target="password-new-confirm"
+                                        aria-label="パスワードを表示"
+                                        title="パスワードを表示"
+                                    >
+                                        <svg
+                                            class="eye-icon"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6"
+                                            ></path>
+
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="2.5"
+                                            ></circle>
+                                        </svg>
+
+                                        <svg
+                                            class="eye-off-icon"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="m3 3 18 18"></path>
+
+                                            <path
+                                                d="M10.6 6.2A9.8 9.8 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-2.1 2.8"
+                                            ></path>
+
+                                            <path
+                                                d="M6.2 6.2A16.2 16.2 0 0 0 2.5 12s3.5 6 9.5 6a9.8 9.8 0 0 0 4.1-.9"
+                                            ></path>
+
+                                            <path
+                                                d="M9.9 9.9a3 3 0 0 0 4.2 4.2"
+                                            ></path>
+                                        </svg>
+                                    </button>
+
+                                </div>
+
+                                <p class="form-help">
+                                    現在使用しているものとは異なるパスワードを設定してください。
+                                </p>
+
+                            </div>
+
+
+                            <div class="form-submit-row">
+
+                                <button
+                                    type="submit"
+                                    class="account-save-button"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M5 12l4 4L19 6"></path>
+                                    </svg>
+
+                                    パスワードを変更
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <aside class="account-side-column">
+
+                <!-- 登録情報 -->
+
+                <section class="account-card">
+
+                    <div class="account-card-heading">
+
+                        <span class="account-card-heading-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <rect
+                                    x="4"
+                                    y="3"
+                                    width="16"
+                                    height="18"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="M8 8h8"></path>
+                                <path d="M8 12h8"></path>
+                                <path d="M8 16h5"></path>
+                            </svg>
+
+                        </span>
+
+                        <div>
+                            <h2>登録情報</h2>
+
+                            <p>
+                                現在のアカウント情報です。
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="account-card-body">
+
+                        <div class="account-information-list">
+
+                            <div class="account-information-row">
+                                <span>ユーザーID</span>
+
+                                <strong>
+                                    {{ user["id"] }}
+                                </strong>
+                            </div>
+
+
+                            <div class="account-information-row">
+                                <span>名前</span>
+
+                                <strong>
+                                    {{ user["name"] }}
+                                </strong>
+                            </div>
+
+
+                            <div class="account-information-row">
+                                <span>メールアドレス</span>
+
+                                <strong>
+                                    {{ user["email"] }}
+                                </strong>
+                            </div>
+
+
+                            <div class="account-information-row">
+                                <span>登録日</span>
+
+                                <strong>
+                                    {{ user["created_at"] }}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- セキュリティ -->
+
+                <section class="account-card">
+
+                    <div class="account-card-heading">
+
+                        <span class="account-card-heading-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d="M12 3 5 6v5c0 4.8 2.9 8.5 7 10 4.1-1.5 7-5.2 7-10V6l-7-3Z"
+                                ></path>
+
+                                <path d="m9 12 2 2 4-5"></path>
+                            </svg>
+
+                        </span>
+
+                        <div>
+                            <h2>セキュリティ</h2>
+
+                            <p>
+                                アカウントを安全に保つための注意事項です。
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="account-card-body">
+
+                        <div class="security-information">
+
+                            <div class="security-information-item">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="M12 8v4"></path>
+                                    <path d="M12 16h.01"></path>
+                                </svg>
+
+                                <p>
+                                    他のサービスと同じパスワードを使用しないようにしてください。
+                                </p>
+
+                            </div>
+
+
+                            <div class="security-information-item">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="M12 8v4"></path>
+                                    <path d="M12 16h.01"></path>
+                                </svg>
+
+                                <p>
+                                    メールアドレスを変更すると、次回から新しいアドレスでログインします。
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ログアウト -->
+
+                <section class="account-card logout-card">
+
+                    <div class="account-card-heading">
+
+                        <span class="account-card-heading-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M10 17l5-5-5-5"></path>
+                                <path d="M15 12H3"></path>
+
+                                <path
+                                    d="M15 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"
+                                ></path>
+                            </svg>
+
+                        </span>
+
+                        <div>
+                            <h2>ログアウト</h2>
+
+                            <p>
+                                現在の端末からログアウトします。
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="account-card-body">
+
+                        <p class="logout-description">
+                            再度利用するには、メールアドレスとパスワードによるログインが必要です。
+                        </p>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('logout') }}"
+                            class="logout-form"
+                        >
+
+                            <button
+                                type="submit"
+                                class="logout-button"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M10 17l5-5-5-5"></path>
+                                    <path d="M15 12H3"></path>
+
+                                    <path
+                                        d="M15 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"
+                                    ></path>
+                                </svg>
+
+                                ログアウト
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </section>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+    <script>
+        const passwordToggleButtons =
+            document.querySelectorAll(".password-toggle");
+
+
+        passwordToggleButtons.forEach(
+            function (button) {
+                button.addEventListener(
+                    "click",
+                    function () {
+                        const targetId =
+                            button.dataset.target;
+
+                        const passwordInput =
+                            document.getElementById(targetId);
+
+                        if (!passwordInput) {
+                            return;
+                        }
+
+                        const isHidden =
+                            passwordInput.type === "password";
+
+                        passwordInput.type =
+                            isHidden
+                                ? "text"
+                                : "password";
+
+                        button.classList.toggle(
+                            "is-visible",
+                            isHidden
+                        );
+
+                        button.setAttribute(
+                            "aria-label",
+                            isHidden
+                                ? "パスワードを非表示"
+                                : "パスワードを表示"
+                        );
+
+                        button.setAttribute(
+                            "title",
+                            isHidden
+                                ? "パスワードを非表示"
+                                : "パスワードを表示"
+                        );
+
+                        passwordInput.focus();
+                    }
+                );
+            }
+        );
+
+
+        const accountForms =
+            document.querySelectorAll(".account-form");
+
+
+        accountForms.forEach(
+            function (form) {
+                form.addEventListener(
+                    "submit",
+                    function () {
+                        const submitButton =
+                            form.querySelector(
+                                ".account-save-button"
+                            );
+
+                        if (!submitButton) {
+                            return;
+                        }
+
+                        submitButton.disabled = true;
+                        submitButton.style.opacity = "0.7";
+                        submitButton.style.cursor = "wait";
+                    }
+                );
+            }
+        );
+    </script>
+
+</body>
+
+</html>

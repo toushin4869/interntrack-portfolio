@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>企業一覧 | InternTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/common.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/companies.css') }}"
+    >
+</head>
+
+<body>
+{% if demo_mode %}
+<div style="background:#173e60;color:#fff;padding:10px 18px;text-align:center;font-size:13px;line-height:1.6;position:relative;z-index:9999">
+  <strong>InternTrack ポートフォリオデモ</strong> — 企業名・予定はすべて架空です。データは訪問者ごとに分離され、一定期間後に消えます。実際の個人情報を入力しないでください。メール連携は無効です。
+</div>
+{% endif %}
+
+{% include "header.html" %}
+
+<main class="companies-page">
+
+    <section class="companies-heading">
+
+        <div>
+
+            <p class="welcome-label">
+                COMPANY MANAGEMENT
+            </p>
+
+            <h1>
+                {{ filter_title }}
+            </h1>
+
+            <p>
+                {{ filter_description }}
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('add_company') }}"
+            class="companies-add-button"
+        >
+            ＋ 新しい企業を追加
+        </a>
+
+    </section>
+
+
+    <nav class="company-filter-tabs">
+
+        <a
+            href="{{ url_for('companies', q=search_query, sort=selected_sort) }}"
+            class="{% if selected_filter == 'all' %}active{% endif %}"
+        >
+            すべて
+        </a>
+
+        <a
+            href="{{ url_for('companies', filter='selection', q=search_query, sort=selected_sort) }}"
+            class="{% if selected_filter == 'selection' %}active{% endif %}"
+        >
+            選考中
+        </a>
+
+        <a
+            href="{{ url_for('companies', filter='deadline', q=search_query, sort=selected_sort) }}"
+            class="{% if selected_filter == 'deadline' %}active{% endif %}"
+        >
+            7日以内の締切
+        </a>
+
+        <a
+            href="{{ url_for('companies', filter='waiting', q=search_query, sort=selected_sort) }}"
+            class="{% if selected_filter == 'waiting' %}active{% endif %}"
+        >
+            結果待ち
+        </a>
+
+    </nav>
+
+
+    <form
+        class="company-toolbar"
+        method="get"
+        action="{{ url_for('companies') }}"
+    >
+
+        <div class="company-search">
+
+            {% if selected_filter != "all" %}
+                <input
+                    type="hidden"
+                    name="filter"
+                    value="{{ selected_filter }}"
+                >
+            {% endif %}
+
+            <span aria-hidden="true">
+                ⌕
+            </span>
+
+            <input
+                name="q"
+                type="text"
+                placeholder="企業名を検索"
+                value="{{ search_query }}"
+                aria-label="企業名を検索"
+            >
+
+        </div>
+
+        <div class="company-toolbar-actions">
+
+            <label class="company-sort">
+
+                <span>並び順</span>
+
+                <select
+                    name="sort"
+                    aria-label="企業の並び順"
+                >
+                    <option value="newest" {% if selected_sort == "newest" %}selected{% endif %}>登録が新しい順</option>
+                    <option value="deadline" {% if selected_sort == "deadline" %}selected{% endif %}>締切が近い順</option>
+                    <option value="name" {% if selected_sort == "name" %}selected{% endif %}>企業名順</option>
+                    <option value="status" {% if selected_sort == "status" %}selected{% endif %}>ステータス順</option>
+                </select>
+
+            </label>
+
+            <button
+                type="submit"
+                class="company-search-button"
+            >
+                検索
+            </button>
+
+            {% if search_query %}
+                <a
+                    class="company-search-reset"
+                    href="{% if selected_filter == 'all' %}{{ url_for('companies', sort=selected_sort) }}{% else %}{{ url_for('companies', filter=selected_filter, sort=selected_sort) }}{% endif %}"
+                >
+                    クリア
+                </a>
+            {% endif %}
+
+            <div class="company-count">
+
+                表示
+
+                <strong>
+                    {{ companies|length }}
+                </strong>
+
+                社
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+    {% if companies %}
+
+        <section class="company-card-list">
+
+            {% for company in companies %}
+
+                <article class="company-list-card">
+
+                    <div class="company-overview">
+
+                        <div class="company-letter">
+                            {{ company["name"][0] }}
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                <a
+                                    href="{{ url_for('company_detail', company_id=company['id']) }}"
+                                >
+                                    {{ company["name"] }}
+                                </a>
+                            </h2>
+
+                            <span class="company-status">
+                                {{ company["status"] }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="company-details">
+
+                        <div class="company-detail-item">
+
+                            <span>
+                                次の予定
+                            </span>
+
+                            <strong>
+                                {{ company["next_schedule"] or "未設定" }}
+                            </strong>
+
+                        </div>
+
+                        <div class="company-detail-item">
+
+                            <span>
+                                締切
+                            </span>
+
+                            <strong>
+                                {{ company["deadline"] or "未設定" }}
+                            </strong>
+
+                        </div>
+
+                        <div class="company-detail-item">
+
+                            <span>
+                                マイページ
+                            </span>
+
+                            {% if company["mypage_url"] %}
+
+                                <a
+                                    href="{{ company['mypage_url'] }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    マイページを開く
+                                </a>
+
+                            {% else %}
+
+                                <strong>
+                                    未設定
+                                </strong>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="company-actions">
+
+                        <a
+                            href="{{ url_for('company_detail', company_id=company['id']) }}"
+                            class="company-detail-button"
+                        >
+                            詳細を見る
+                        </a>
+
+                        <button
+                            type="button"
+                            class="company-menu-button"
+                            aria-label="その他の操作"
+                        >
+                            …
+                        </button>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </section>
+
+    {% else %}
+
+        <section class="company-empty">
+
+            <div class="company-empty-icon">
+                企
+            </div>
+
+            {% if search_query %}
+
+                <h2>
+                    「{{ search_query }}」に一致する企業はありません
+                </h2>
+
+                <p>
+                    検索語を変えるか、検索条件をクリアしてください。
+                </p>
+
+                <a href="{% if selected_filter == 'all' %}{{ url_for('companies', sort=selected_sort) }}{% else %}{{ url_for('companies', filter=selected_filter, sort=selected_sort) }}{% endif %}">
+                    検索条件をクリア
+                </a>
+
+            {% else %}
+
+                <h2>
+                    該当する企業はありません
+                </h2>
+
+                <p>
+                    この条件に該当する企業は、現在登録されていません。
+                </p>
+
+                {% if selected_filter != "all" %}
+
+                    <a href="{{ url_for('companies') }}">
+                        すべての企業を見る
+                    </a>
+
+                {% else %}
+
+                    <a href="{{ url_for('add_company') }}">
+                        最初の企業を追加
+                    </a>
+
+                {% endif %}
+
+            {% endif %}
+
+        </section>
+
+    {% endif %}
+
+</main>
+
+</body>
+
+</html>

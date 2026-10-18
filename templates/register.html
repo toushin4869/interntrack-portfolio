@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        新規登録 | InternTrack
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/auth.css') }}"
+    >
+</head>
+
+<body class="auth-page">
+
+<main class="auth-card">
+
+    <a
+        href="{{ url_for('login') }}"
+        class="auth-brand"
+    >
+
+        <span class="auth-brand-icon">
+            IT
+        </span>
+
+        <span class="auth-brand-text">
+
+            <strong>
+                InternTrack
+            </strong>
+
+            <span>
+                就活管理アプリ
+            </span>
+
+        </span>
+
+    </a>
+
+
+    <p class="auth-label">
+        CREATE ACCOUNT
+    </p>
+
+    <h1>
+        新規登録
+    </h1>
+
+    <p class="auth-description">
+        InternTrackを利用するためのアカウントを作成します。
+    </p>
+
+
+    {% if error %}
+
+        <div class="auth-error">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    <form
+        method="POST"
+        class="auth-form"
+    >
+
+        <div class="auth-field">
+
+            <label for="name">
+                名前
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                autocomplete="name"
+            >
+
+        </div>
+
+
+        <div class="auth-field">
+
+            <label for="email">
+                メールアドレス
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                autocomplete="email"
+            >
+
+        </div>
+
+
+        <div class="auth-field">
+
+            <label for="password">
+                パスワード
+            </label>
+
+            <div class="password-input-wrapper">
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    minlength="8"
+                    required
+                    autocomplete="new-password"
+                    placeholder="8文字以上"
+                >
+
+                <button
+                    type="button"
+                    class="password-toggle-button"
+                    data-target="password"
+                    aria-label="パスワードを表示"
+                    title="パスワードを表示"
+                >
+
+                    <span class="eye-icon">
+                        👁
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="auth-field">
+
+            <label for="password_confirm">
+                パスワード確認
+            </label>
+
+            <div class="password-input-wrapper">
+
+                <input
+                    type="password"
+                    id="password_confirm"
+                    name="password_confirm"
+                    minlength="8"
+                    required
+                    autocomplete="new-password"
+                >
+
+                <button
+                    type="button"
+                    class="password-toggle-button"
+                    data-target="password_confirm"
+                    aria-label="確認用パスワードを表示"
+                    title="確認用パスワードを表示"
+                >
+
+                    <span class="eye-icon">
+                        👁
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="auth-submit"
+        >
+            アカウントを作成
+        </button>
+
+    </form>
+
+
+    <p class="auth-switch">
+
+        すでにアカウントをお持ちの方は
+
+        <a href="{{ url_for('login') }}">
+            ログイン
+        </a>
+
+    </p>
+
+</main>
+
+
+<script>
+    const passwordToggleButtons = document.querySelectorAll(
+        ".password-toggle-button"
+    );
+
+    passwordToggleButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const targetId = button.dataset.target;
+            const passwordInput = document.getElementById(targetId);
+
+            if (!passwordInput) {
+                return;
+            }
+
+            const isPasswordHidden =
+                passwordInput.type === "password";
+
+            passwordInput.type =
+                isPasswordHidden ? "text" : "password";
+
+            button.classList.toggle(
+                "is-visible",
+                isPasswordHidden
+            );
+
+            button.setAttribute(
+                "aria-label",
+                isPasswordHidden
+                    ? "パスワードを非表示"
+                    : "パスワードを表示"
+            );
+
+            button.setAttribute(
+                "title",
+                isPasswordHidden
+                    ? "パスワードを非表示"
+                    : "パスワードを表示"
+            );
+
+            passwordInput.focus();
+        });
+    });
+</script>
+
+</body>
+
+</html>

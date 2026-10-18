@@ -1,0 +1,10 @@
+Flask>=3.1,<4
+Werkzeug>=3.1,<4
+jpholiday>=1.0,<2
+python-dotenv>=1.0,<2
+requests>=2.32,<3
+msal>=1.31,<2
+google-auth-oauthlib>=1.2,<2
+google-api-python-client>=2.100,<3
+cryptography>=43,<48
+gunicorn>=23,<26

@@ -1,0 +1,455 @@
+/* =========================
+   ホーム画面
+========================= */
+
+.dashboard {
+    width: min(1320px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 26px 0 40px;
+}
+
+
+/* =========================
+   ページ上部
+========================= */
+
+.dashboard-heading {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.dashboard-heading h1 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.2;
+}
+
+.dashboard-heading > div:first-child > p:last-child {
+    margin: 9px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.today-box {
+    min-width: 250px;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.today-box span {
+    color: var(--purple);
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+}
+
+.today-box strong {
+    font-size: 13px;
+}
+
+
+/* =========================
+   概要カード
+========================= */
+
+.summary-grid {
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.summary-card {
+    min-height: 106px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.summary-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 13px;
+    color: var(--purple);
+    background: var(--purple-light);
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.summary-icon.warning {
+    color: var(--orange);
+    background: var(--orange-light);
+}
+
+.summary-icon.success {
+    color: var(--green);
+    background: var(--green-light);
+}
+
+.summary-content {
+    min-width: 0;
+}
+
+.summary-content > span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.summary-content > div {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.summary-content strong {
+    font-size: 30px;
+    line-height: 1;
+}
+
+.summary-content small {
+    padding-bottom: 3px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   共通パネル
+========================= */
+
+.dashboard-panel {
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.panel-heading {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.panel-heading h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.panel-heading > a {
+    padding-top: 8px;
+    color: var(--purple);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.panel-heading > a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   メイン2カラム
+========================= */
+
+.dashboard-main {
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.65fr)
+        minmax(320px, 0.75fr);
+    gap: 18px;
+}
+
+.schedule-panel,
+.priority-panel {
+    min-height: 290px;
+    padding: 22px;
+}
+
+
+/* =========================
+   予定
+========================= */
+
+.schedule-empty {
+    min-height: 205px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #ccd3df;
+    border-radius: 12px;
+    background: #f8f9fc;
+    text-align: center;
+}
+
+.empty-icon {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 13px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    color: var(--purple);
+    background: var(--purple-light);
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.schedule-empty h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.schedule-empty p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+/* =========================
+   優先して確認
+========================= */
+
+.priority-list {
+    display: grid;
+}
+
+.priority-item {
+    padding: 15px 0;
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid #edf0f4;
+}
+
+.priority-item:first-child {
+    border-top: none;
+    padding-top: 5px;
+}
+
+.priority-symbol {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    color: var(--purple);
+    background: var(--purple-light);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.priority-symbol.warning {
+    color: var(--orange);
+    background: var(--orange-light);
+}
+
+.priority-symbol.success {
+    color: var(--green);
+    background: var(--green-light);
+}
+
+.priority-item strong {
+    display: block;
+    font-size: 13px;
+}
+
+.priority-item p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   選考状況
+========================= */
+
+.progress-panel {
+    padding: 20px 22px 22px;
+}
+
+.selection-progress {
+    display: flex;
+    align-items: center;
+}
+
+.progress-step {
+    min-width: 130px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.progress-step > span {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 11px;
+    color: var(--purple);
+    background: var(--purple-light);
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.progress-step strong {
+    display: block;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.progress-step p {
+    margin: 3px 0 0;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.progress-line {
+    min-width: 20px;
+    height: 2px;
+    flex: 1;
+    margin: 0 10px;
+    background: var(--border);
+}
+
+
+/* =========================
+   タブレット
+========================= */
+
+@media (max-width: 1050px) {
+    .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-main {
+        grid-template-columns: 1fr;
+    }
+
+    .selection-progress {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+    }
+
+    .progress-step {
+        min-width: 0;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .progress-line {
+        display: none;
+    }
+}
+
+
+/* =========================
+   スマートフォン
+========================= */
+
+@media (max-width: 720px) {
+    .dashboard {
+        width: calc(100% - 28px);
+        padding-top: 20px;
+    }
+
+    .dashboard-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .dashboard-heading h1 {
+        font-size: 29px;
+    }
+
+    .today-box {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .schedule-panel,
+    .priority-panel,
+    .progress-panel {
+        padding: 18px;
+    }
+
+    .selection-progress {
+        grid-template-columns: 1fr;
+    }
+
+    .progress-step {
+        align-items: center;
+        flex-direction: row;
+    }
+}
+
+/* =========================
+   概要カードのリンク表示
+========================= */
+
+.summary-card {
+    position: relative;
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    border-color: #c7ccda;
+    box-shadow: 0 10px 24px rgba(23, 36, 61, 0.09);
+}
+
+.summary-arrow {
+    margin-left: auto;
+    color: #a1a9b8;
+    font-size: 18px;
+    font-weight: 700;
+    transition:
+        color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.summary-card:hover .summary-arrow {
+    transform: translateX(3px);
+    color: var(--purple);
+}

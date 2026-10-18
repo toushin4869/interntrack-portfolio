@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ company["name"] }}を編集 | InternTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/common.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/edit_company.css') }}"
+    >
+</head>
+
+<body>
+{% if demo_mode %}
+<div style="background:#173e60;color:#fff;padding:10px 18px;text-align:center;font-size:13px;line-height:1.6;position:relative;z-index:9999">
+  <strong>InternTrack ポートフォリオデモ</strong> — 企業名・予定はすべて架空です。データは訪問者ごとに分離され、一定期間後に消えます。実際の個人情報を入力しないでください。メール連携は無効です。
+</div>
+{% endif %}
+
+<header class="app-header">
+
+    <a
+        href="{{ url_for('index') }}"
+        class="brand"
+    >
+
+        <span class="brand-icon">
+            IT
+        </span>
+
+        <div class="brand-text">
+
+            <strong>
+                InternTrack
+            </strong>
+
+            <span>
+                就活管理アプリ
+            </span>
+
+        </div>
+
+    </a>
+
+    <nav class="main-nav">
+
+        <a href="{{ url_for('index') }}">
+            ホーム
+        </a>
+
+        <a
+            href="{{ url_for('companies') }}"
+            class="active"
+        >
+            企業一覧
+        </a>
+
+        <a href="#">
+            カレンダー
+        </a>
+
+        <a href="#">
+            メール
+        </a>
+
+    </nav>
+
+    <a
+        href="{{ url_for('add_company') }}"
+        class="header-add-button"
+    >
+        ＋ 企業を追加
+    </a>
+
+</header>
+
+
+<main class="edit-page">
+
+    <div class="edit-page-top">
+
+        <a
+            href="{{ url_for('company_detail', company_id=company['id']) }}"
+            class="back-button"
+        >
+            ← 企業詳細へ戻る
+        </a>
+
+    </div>
+
+
+    <section class="edit-card">
+
+        <div class="edit-card-header">
+
+            <div class="edit-company-letter">
+                {{ company["name"][0] }}
+            </div>
+
+            <div>
+
+                <p class="edit-label">
+                    EDIT COMPANY
+                </p>
+
+                <h1>
+                    企業情報を編集
+                </h1>
+
+                <p>
+                    {{ company["name"] }}の登録内容を変更します。
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if error %}
+
+            <div class="form-error">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            class="edit-form"
+        >
+
+            <div class="form-group form-group-full">
+
+                <label for="name">
+                    企業名
+                    <span class="required">
+                        必須
+                    </span>
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value="{{ request.form.get('name', company['name']) }}"
+                    placeholder="企業名を入力"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="status">
+                    選考状況
+                    <span class="required">
+                        必須
+                    </span>
+                </label>
+
+                {% set current_status = request.form.get(
+                    'status',
+                    company['status']
+                ) %}
+
+                <select
+                    id="status"
+                    name="status"
+                    required
+                >
+
+                    <option
+                        value=""
+                        {% if not current_status %}selected{% endif %}
+                    >
+                        選考状況を選択
+                    </option>
+
+                    <option
+                        value="応募検討中"
+                        {% if current_status == "応募検討中" %}selected{% endif %}
+                    >
+                        応募検討中
+                    </option>
+
+                    <option
+                        value="ES作成中"
+                        {% if current_status == "ES作成中" %}selected{% endif %}
+                    >
+                        ES作成中
+                    </option>
+
+                    <option
+                        value="ES提出済"
+                        {% if current_status == "ES提出済" %}selected{% endif %}
+                    >
+                        ES提出済
+                    </option>
+
+                    <option
+                        value="適性検査"
+                        {% if current_status == "適性検査" %}selected{% endif %}
+                    >
+                        適性検査
+                    </option>
+
+                    <option
+                        value="一次面接"
+                        {% if current_status == "一次面接" %}selected{% endif %}
+                    >
+                        一次面接
+                    </option>
+
+                    <option
+                        value="二次面接"
+                        {% if current_status == "二次面接" %}selected{% endif %}
+                    >
+                        二次面接
+                    </option>
+
+                    <option
+                        value="最終面接"
+                        {% if current_status == "最終面接" %}selected{% endif %}
+                    >
+                        最終面接
+                    </option>
+
+                    <option
+                        value="結果待ち"
+                        {% if current_status == "結果待ち" %}selected{% endif %}
+                    >
+                        結果待ち
+                    </option>
+
+                    <option
+                        value="内々定"
+                        {% if current_status == "内々定" %}selected{% endif %}
+                    >
+                        内々定
+                    </option>
+
+                    <option
+                        value="不合格"
+                        {% if current_status == "不合格" %}selected{% endif %}
+                    >
+                        不合格
+                    </option>
+
+                    <option
+                        value="辞退"
+                        {% if current_status == "辞退" %}selected{% endif %}
+                    >
+                        辞退
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="deadline">
+                    締切
+                </label>
+
+                <input
+                    type="date"
+                    id="deadline"
+                    name="deadline"
+                    value="{{ request.form.get(
+                        'deadline',
+                        company['deadline'] or ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group form-group-full">
+
+                <label for="next_schedule">
+                    次の予定
+                </label>
+
+                <input
+                    type="text"
+                    id="next_schedule"
+                    name="next_schedule"
+                    value="{{ request.form.get(
+                        'next_schedule',
+                        company['next_schedule'] or ''
+                    ) }}"
+                    placeholder="例：8月5日 10:00 一次面接"
+                >
+
+            </div>
+
+
+            <div class="form-group form-group-full">
+
+                <label for="mypage_url">
+                    マイページURL
+                </label>
+
+                <input
+                    type="url"
+                    id="mypage_url"
+                    name="mypage_url"
+                    value="{{ request.form.get(
+                        'mypage_url',
+                        company['mypage_url'] or ''
+                    ) }}"
+                    placeholder="https://example.com"
+                >
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <a
+                    href="{{ url_for(
+                        'company_detail',
+                        company_id=company['id']
+                    ) }}"
+                    class="cancel-button"
+                >
+                    キャンセル
+                </a>
+
+                <button
+                    type="submit"
+                    class="save-button"
+                >
+                    変更を保存
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<header class="app-header">
+
+    <a
+        href="{{ url_for('index') }}"
+        class="brand"
+    >
+        <span class="brand-icon">
+            IT
+        </span>
+
+        <div class="brand-text">
+            <strong>
+                InternTrack
+            </strong>
+
+            <span>
+                就活管理アプリ
+            </span>
+        </div>
+    </a>
+
+    <nav class="main-nav">
+
+        <a
+            href="{{ url_for('index') }}"
+            class="{% if request.endpoint == 'index' %}active{% endif %}"
+        >
+            ホーム
+        </a>
+
+        <a
+            href="{{ url_for('companies') }}"
+            class="{% if request.endpoint in ['companies', 'add_company', 'company_detail', 'edit_company'] %}active{% endif %}"
+        >
+            企業一覧
+        </a>
+
+        <a
+            href="{{ url_for('calendar_view') }}"
+            class="{% if request.endpoint == 'calendar_view' %}active{% endif %}"
+        >
+            カレンダー
+        </a>
+
+        {% if not demo_mode %}
+        <a
+            href="{{ url_for('email_settings') }}"
+            class="{% if request.endpoint in ['email_settings', 'toggle_email_account', 'delete_email_account'] %}active{% endif %}"
+        >
+            メール
+        </a>
+        {% endif %}
+
+    </nav>
+
+    <a
+        href="{{ url_for('add_company') }}"
+        class="header-add-button"
+    >
+        ＋ 企業を追加
+    </a>
+
+</header>

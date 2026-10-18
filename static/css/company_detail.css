@@ -1,0 +1,1055 @@
+/* =========================================================
+   企業詳細ページ全体
+========================================================= */
+
+.detail-page {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 42px 0 80px;
+}
+
+.detail-page-top {
+    margin-bottom: 18px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.back-button:hover {
+    color: #2563eb;
+    transform: translateX(-3px);
+}
+
+
+/* =========================================================
+   メインカード
+========================================================= */
+
+.company-detail-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================================================
+   企業情報ヘッダー
+========================================================= */
+
+.company-detail-header {
+    padding: 38px 42px 34px;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(59, 130, 246, 0.14),
+            transparent 34%
+        ),
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f8fbff 100%
+        );
+}
+
+.company-main-info {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.company-large-letter {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 84px;
+    height: 84px;
+    color: #ffffff;
+    font-size: 34px;
+    font-weight: 800;
+    border-radius: 22px;
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.25);
+}
+
+.company-title-area {
+    min-width: 0;
+}
+
+.company-label,
+.section-label {
+    margin: 0 0 8px;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.company-title-area h1 {
+    margin: 0;
+    color: #0f172a;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.company-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.company-id {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.company-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px;
+    padding: 5px 12px;
+    color: #1d4ed8;
+    font-size: 12px;
+    font-weight: 800;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    background: #eff6ff;
+}
+
+
+/* =========================================================
+   区切り線
+========================================================= */
+
+.detail-divider {
+    height: 1px;
+    margin: 0 42px;
+    background: #e2e8f0;
+}
+
+
+/* =========================================================
+   基本情報カード
+========================================================= */
+
+.detail-information-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding: 32px 42px;
+}
+
+.detail-information-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 104px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    background: #f8fafc;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.detail-information-card:hover {
+    transform: translateY(-2px);
+    border-color: #bfdbfe;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.mypage-card {
+    grid-column: 1 / -1;
+}
+
+.detail-icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: #2563eb;
+    font-size: 15px;
+    font-weight: 800;
+    border-radius: 13px;
+    background: #dbeafe;
+}
+
+.detail-information-content {
+    min-width: 0;
+}
+
+.detail-information-content > span {
+    display: block;
+    margin-bottom: 6px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.detail-information-content strong {
+    display: block;
+    color: #0f172a;
+    font-size: 16px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.mypage-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #2563eb;
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.mypage-link:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   選考履歴セクション
+========================================================= */
+
+.selection-history-section {
+    padding: 36px 42px 42px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.section-heading h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 25px;
+    line-height: 1.4;
+}
+
+.section-heading p:not(.section-label) {
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   選考履歴追加フォーム
+========================================================= */
+
+.event-add-form {
+    margin-bottom: 30px;
+    padding: 24px;
+    border: 1px solid #dbeafe;
+    border-radius: 20px;
+    background: #f8fbff;
+}
+
+.event-form-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(160px, 0.8fr)
+        minmax(180px, 0.9fr)
+        minmax(240px, 1.5fr);
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.required-mark {
+    color: #dc2626;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    color: #0f172a;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    outline: none;
+    background: #ffffff;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.form-group input,
+.form-group select {
+    height: 46px;
+    padding: 0 13px;
+}
+
+.form-group textarea {
+    min-height: 82px;
+    padding: 12px 13px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.event-memo-group {
+    margin-top: 16px;
+}
+
+.event-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.event-add-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 20px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.event-add-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.28);
+}
+
+
+/* =========================================================
+   選考履歴一覧
+========================================================= */
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+
+/* 1件の履歴全体 */
+
+.event-item {
+    display: grid;
+    grid-template-columns: 130px 34px minmax(0, 1fr);
+    align-items: start;
+    min-height: 0;
+}
+
+
+/* 日付 */
+
+.event-date-area {
+    padding-top: 17px;
+    text-align: right;
+}
+
+.event-date {
+    color: #0f172a;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.event-date-empty {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+
+/* タイムライン */
+
+.event-timeline-mark {
+    position: relative;
+    display: flex;
+    align-self: stretch;
+    justify-content: center;
+    min-height: 100%;
+}
+
+.event-timeline-mark::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    content: "";
+    background: #dbeafe;
+}
+
+.event-item:first-child .event-timeline-mark::before {
+    top: 21px;
+}
+
+.event-item:last-child .event-timeline-mark::before {
+    bottom: calc(100% - 22px);
+}
+
+.event-timeline-mark span {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    margin-top: 18px;
+    border: 4px solid #dbeafe;
+    border-radius: 50%;
+    background: #2563eb;
+    box-shadow: 0 0 0 3px #ffffff;
+}
+
+
+/* 履歴カード */
+
+.event-content {
+    min-width: 0;
+    margin: 0 0 12px 4px;
+    padding: 14px 16px 15px;
+    border: 1px solid #dbeafe;
+    border-left: 4px solid #2563eb;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.045);
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.event-content:hover {
+    transform: translateY(-1px);
+    border-color: #bfdbfe;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.065);
+}
+
+
+/* カード上部 */
+
+.event-content-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.event-content-top > div {
+    min-width: 0;
+    flex: 1;
+}
+
+
+/* 種類タグ */
+
+.event-type {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24px;
+    margin: 0 0 5px;
+    padding: 2px 9px;
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.3;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    background: #eff6ff;
+}
+
+
+/* タイトル */
+
+.event-content h3 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+
+/* メモ */
+
+.event-memo {
+    display: block;
+    width: 100%;
+    margin: 10px 0 0;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.65;
+    text-align: left;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+
+/* MEMOラベルは非表示 */
+
+.event-memo::before {
+    display: none;
+    content: none;
+}
+
+
+/* 履歴削除ボタン */
+
+.event-delete-button {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    color: #64748b;
+    font-family: inherit;
+    font-size: 18px;
+    line-height: 1;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #ffffff;
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.event-delete-button:hover {
+    color: #dc2626;
+    border-color: #fecaca;
+    background: #fef2f2;
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   履歴がない場合
+========================================================= */
+
+.empty-event-message {
+    padding: 38px 24px;
+    text-align: center;
+    border: 1px dashed #cbd5e1;
+    border-radius: 18px;
+    background: #f8fafc;
+}
+
+.empty-event-icon {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 30px;
+}
+
+.empty-event-message strong {
+    display: block;
+    color: #334155;
+    font-size: 16px;
+}
+
+.empty-event-message p {
+    margin: 8px 0 0;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   編集・削除エリア
+========================================================= */
+
+.detail-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 30px 42px 34px;
+}
+
+.detail-action-description strong {
+    color: #0f172a;
+    font-size: 15px;
+}
+
+.detail-action-description p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.detail-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.detail-action-buttons form {
+    margin: 0;
+}
+
+.edit-button,
+.delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-width: 108px;
+    min-height: 44px;
+    padding: 0 18px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    border-radius: 11px;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.edit-button {
+    color: #ffffff;
+    border: 1px solid #2563eb;
+    background: #2563eb;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2);
+}
+
+.edit-button:hover {
+    transform: translateY(-2px);
+    background: #1d4ed8;
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
+}
+
+.delete-button {
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    background: #ffffff;
+}
+
+.delete-button:hover {
+    transform: translateY(-2px);
+    background: #fef2f2;
+    box-shadow: 0 10px 20px rgba(220, 38, 38, 0.1);
+}
+
+
+/* =========================================================
+   タブレット
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .detail-information-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mypage-card {
+        grid-column: auto;
+    }
+
+    .event-form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .event-form-grid .form-group:last-child {
+        grid-column: 1 / -1;
+    }
+
+    .event-item {
+        grid-template-columns: 108px 30px minmax(0, 1fr);
+    }
+
+    .event-date {
+        font-size: 14px;
+    }
+
+}
+
+
+/* =========================================================
+   スマートフォン
+========================================================= */
+
+@media (max-width: 680px) {
+
+    .detail-page {
+        width: min(100% - 24px, 1180px);
+        padding: 24px 0 50px;
+    }
+
+    .company-detail-card {
+        border-radius: 18px;
+    }
+
+    .company-detail-header,
+    .selection-history-section,
+    .detail-actions {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+
+    .company-detail-header {
+        padding-top: 28px;
+        padding-bottom: 26px;
+    }
+
+    .company-main-info {
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .company-large-letter {
+        width: 62px;
+        height: 62px;
+        font-size: 26px;
+        border-radius: 17px;
+    }
+
+    .company-title-area h1 {
+        font-size: 26px;
+    }
+
+    .detail-divider {
+        margin: 0 20px;
+    }
+
+    .detail-information-grid {
+        grid-template-columns: 1fr;
+        padding: 24px 20px;
+    }
+
+    .mypage-card {
+        grid-column: auto;
+    }
+
+    .selection-history-section {
+        padding-top: 28px;
+        padding-bottom: 32px;
+    }
+
+    .event-add-form {
+        padding: 18px;
+    }
+
+    .event-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .event-form-grid .form-group:last-child {
+        grid-column: auto;
+    }
+
+    .event-form-actions {
+        justify-content: stretch;
+    }
+
+    .event-add-button {
+        width: 100%;
+    }
+
+    .event-item {
+        display: grid;
+        grid-template-columns: 22px minmax(0, 1fr);
+        min-height: 0;
+    }
+
+    .event-date-area {
+        grid-column: 2;
+        padding: 0 0 7px 5px;
+        text-align: left;
+    }
+
+    .event-date {
+        font-size: 14px;
+    }
+
+    .event-timeline-mark {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+    }
+
+    .event-timeline-mark span {
+        margin-top: 18px;
+    }
+
+    .event-content {
+        grid-column: 2;
+        margin: 0 0 12px 5px;
+        padding: 13px 14px 14px;
+        border-left-width: 4px;
+    }
+
+    .event-content h3 {
+        font-size: 19px;
+    }
+
+    .event-memo {
+        margin-top: 9px;
+        padding: 9px 10px;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .detail-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .detail-action-buttons {
+        width: 100%;
+    }
+
+    .detail-action-buttons a,
+    .detail-action-buttons form {
+        flex: 1;
+    }
+
+    .edit-button,
+    .delete-button {
+        width: 100%;
+    }
+
+}
+
+/* =========================================================
+   選考履歴カード・メモ表示の最終調整
+========================================================= */
+
+.event-item {
+    min-height: 0;
+}
+
+.event-content {
+    min-width: 0;
+    margin: 0 0 12px 4px;
+    padding: 14px 16px;
+    text-align: left;
+}
+
+.event-content-top,
+.event-content-top > div {
+    text-align: left;
+}
+
+.event-content h3 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.4;
+    text-align: left;
+}
+
+.event-memo {
+    display: block;
+    width: 100%;
+    margin: 10px 0 0;
+    padding: 10px 12px;
+    box-sizing: border-box;
+
+    color: #0f172a;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.6;
+    text-align: left;
+
+    /*
+       改行は残し、HTML側の余分な空白は削除する。
+       pre-wrapではなくpre-lineを使用するのが重要。
+    */
+    white-space: pre-line;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+.event-memo::before {
+    display: none;
+    content: none;
+}
+
+/* ===============================
+   メモ内の余白を削除
+=============================== */
+
+.event-memo {
+    padding: 8px 12px;
+}
+
+.event-memo p {
+    margin: 0;
+    padding: 0;
+}
+
+.event-memo *:first-child {
+    margin-top: 0;
+}
+
+.event-memo *:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================================
+   選考履歴の編集・削除ボタン
+========================================================= */
+
+.event-action-buttons {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 7px;
+}
+
+.event-action-buttons form {
+    margin: 0;
+}
+
+.event-edit-button,
+.event-delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 17px;
+    line-height: 1;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    background: #ffffff;
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.event-edit-button {
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+}
+
+.event-edit-button:hover {
+    color: #1d4ed8;
+    border-color: #93c5fd;
+    background: #eff6ff;
+    transform: scale(1.05);
+}
+
+.event-delete-button {
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+
+.event-delete-button:hover {
+    color: #dc2626;
+    border-color: #fecaca;
+    background: #fef2f2;
+    transform: scale(1.05);
+}
+
+/* ==========================================================
+   選考履歴ヘッダー（編集ボタンを右端へ）
+========================================================== */
+
+.event-content-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    width:100%;
+    gap:16px;
+}
+
+.event-content-top > div:first-child{
+    flex:1;
+}
+
+.event-action-buttons{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+    flex-shrink:0;
+}
