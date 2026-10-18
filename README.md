@@ -63,3 +63,12 @@ Python / Flask / SQLite / HTML / CSS / JavaScript / Google Gmail API / Microsoft
 - `requirements.txt`: Python依存ライブラリ
 - `.gitignore`: 秘密情報・データベースの除外ルール
 - `PORTFOLIO_TEXT.md`: 企業提出用の紹介文
+
+
+## メール画面デモ（2026-10追加）
+
+デモモード（`INTERNTRACK_DEMO_MODE=1`）で「メール」画面を表示できます。架空のGmail / Outlookアカウント・サンプルメールのみを使用し、企業名の自動照合、タブ切替、「登録企業のみ」フィルタ、再照合を試せます。**本物のOAuth接続、外部メール取得、アカウント登録、トークン操作はデモで引き続き禁止**しています。
+
+メール画面：`/email-settings`、再照合：`POST /demo/mail/relink`。初回起動時にデモ用DBに架空アカウントとメールを自動生成します。実在メールアドレス・秘密情報は含めません。
+
+変更ファイル：`app.py`、`templates/header.html`、`templates/email_settings.html`、`static/css/email_settings.css`。GitHubとRenderの設定はそのままでデプロイ可能です。

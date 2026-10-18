@@ -725,3 +725,9 @@
     }
 }
 
+
+/* 公開ポートフォリオ（架空メール）の案内とラベル */
+.demo-instructions { color: #43516b; font-size: 14px; line-height: 1.65; }
+.demo-instructions p { margin: 0 0 12px; }
+.demo-instructions .demo-tip { color: #6b57c3; padding: 9px 12px; background: #f0edff; border-radius: 8px; }
+.demo-matched-label { display: inline-flex; font-size: 11px; font-weight: 800; color: #08745c; background: #e9f9f3; border-radius: 6px; padding: 3px 7px; }

@@ -1948,6 +1948,90 @@ create_tables()
 
 
 # =========================================================
+# デモ専用：メールに記載された企業名での自動照合（外部通信なし）
+# =========================================================
+def relink_demo_mail_data(connection, user_id):
+    """本来の企業名判定ロジックを、架空メールのみへ安全に適用する。"""
+    rows = connection.execute(
+        """SELECT id, subject, sender, snippet FROM email_messages
+           WHERE user_id = ? ORDER BY id""",
+        (user_id,),
+    ).fetchall()
+    matched = 0
+    for message in rows:
+        company_id, method, confidence = find_matching_company(
+            connection, user_id, message["subject"], message["sender"], message["snippet"]
+        )
+        connection.execute(
+            """UPDATE email_messages
+               SET company_id = ?, match_method = ?, match_confidence = ?,
+                   matched_at = CASE WHEN ? IS NULL THEN NULL ELSE CURRENT_TIMESTAMP END
+               WHERE id = ? AND user_id = ?""",
+            (company_id, method, confidence, company_id, message["id"], user_id),
+        )
+        matched += int(company_id is not None)
+    return matched
+
+
+# =========================================================
+# 公開ポートフォリオ専用：外部連携をせず架空メールを再現する
+# =========================================================
+def seed_demo_mail_data(connection):
+    """デモ用の架空アカウント/メールを登録し、実際の照合処理を適用する。
+
+    実ユーザーのメール、OAuth資格情報、外部APIには一切アクセスしない。
+    既存レコードはUNIQUEキーにより二重登録しない。
+    """
+    dummy_accounts = (
+        ("gmail", "sample-gmail@example.invalid", "Gmail（サンプル）"),
+        ("outlook", "sample-outlook@example.invalid", "Outlook（サンプル）"),
+    )
+    account_ids = {}
+    for provider, address, label in dummy_accounts:
+        connection.execute(
+            """INSERT OR IGNORE INTO email_accounts
+               (user_id,provider,email_address,display_name,auth_type,is_active)
+               VALUES(1,?,?,?,'oauth',1)""",
+            (provider,address,label),
+        )
+        account_ids[provider] = connection.execute(
+            "SELECT id FROM email_accounts WHERE user_id=1 AND email_address=?",
+            (address,),
+        ).fetchone()["id"]
+
+    # 架空の企業名はデモの企業マスタに対応。一部は意図的に未紐付けにする。
+    # 後から新しい企業を登録して「企業を再照合」するとマッチングを再体験できる。
+    samples = [
+        ("gmail", "sample-g-1", "【青空テクノロジーズ】一次面接のご案内", "採用担当 <recruit@aozora.example.invalid>",
+         "青空テクノロジーズの一次面接は2026年11月12日 14:00です。", "2026-10-18T13:10:00"),
+        ("gmail", "sample-g-2", "未来データ研究所 エントリーシート提出完了", "採用窓口 <hr@mirai.example.invalid>",
+         "未来データ研究所へのES提出を受け付けました。", "2026-10-18T11:40:00"),
+        ("gmail", "sample-g-3", "【星空システムズ】インターン参加のご案内", "インターン担当 <intern@hoshizora.example.invalid>",
+         "星空システムズのインターンは2026年12月3日に開催されます。", "2026-10-17T19:30:00"),
+        ("gmail", "sample-g-4", "【北斗ソリューションズ】会社説明会のご案内", "採用窓口 <recruit@hokuto.example.invalid>",
+         "北斗ソリューションズの説明会は2026年11月18日に開催予定です。未登録企業のサンプルです。", "2026-10-16T15:20:00"),
+        ("outlook", "sample-o-1", "さくらクラウド 適性検査のご案内", "採用チーム <career@sakura.example.invalid>",
+         "さくらクラウドの適性検査を2026年11月10日までに受検してください。", "2026-10-18T09:20:00"),
+        ("outlook", "sample-o-2", "【未来データ研究所】選考通過のお知らせ", "採用窓口 <hr@mirai.example.invalid>",
+         "未来データ研究所の選考を通過しました。次回の日程は別途ご案内します。", "2026-10-17T17:10:00"),
+        ("outlook", "sample-o-3", "大学キャリアセンターからのお知らせ", "キャリアセンター <career@university.example.invalid>",
+         "合同説明会の情報をお送りします。企業名は未登録のため紐付けされません。", "2026-10-15T12:00:00"),
+    ]
+    for provider, message_id, subject, sender, snippet, received_at in samples:
+        connection.execute(
+            """INSERT OR IGNORE INTO email_messages
+               (user_id,email_account_id,provider,message_id,subject,sender,
+                received_at,snippet,body,is_unread)
+               VALUES(1,?,?,?,?,?,?,?,?,?)""",
+            (account_ids[provider],provider,message_id,subject,sender,
+             received_at,snippet,snippet,1 if message_id.endswith('1') else 0),
+        )
+
+    # 本体と同じ企業名判定ロジックを使う。再実行しても重複しない。
+    return relink_demo_mail_data(connection, 1)
+
+
+# =========================================================
 # ポートフォリオデモ：訪問者ごとの仮データを用意
 # =========================================================
 if DEMO_MODE:
@@ -1975,6 +2059,13 @@ if DEMO_MODE:
                 )
             demo_connection.commit()
 
+    # 起動時にデモ用アカウントとサンプル受信メールを生成。
+    with sqlite3.connect(DATABASE) as demo_mail_connection:
+        demo_mail_connection.row_factory = sqlite3.Row
+        demo_mail_connection.execute("PRAGMA foreign_keys = ON")
+        seed_demo_mail_data(demo_mail_connection)
+        demo_mail_connection.commit()
+
 
 @app.before_request
 def prepare_portfolio_demo():
@@ -2001,7 +2092,7 @@ def prepare_portfolio_demo():
                 pass
 
     # デモでは外部メール接続・会員登録・パスワード変更を公開しない。
-    blocked = {"register", "login", "logout", "account", "email_settings",
+    blocked = {"register", "login", "logout", "account",
                "google_connect", "google_oauth_callback", "outlook_connect",
                "outlook_callback", "sync_outlook_messages", "sync_gmail_messages",
                "toggle_email_account", "delete_email_account"}
@@ -4842,6 +4933,23 @@ def google_oauth_callback():
 
 
 # =========================================================
+# デモ専用：架空メールを登録企業と再照合（外部通信なし）
+# =========================================================
+@app.route("/demo/mail/relink", methods=["POST"])
+def demo_mail_relink():
+    if not DEMO_MODE:
+        abort(404)
+    connection = get_db_connection()
+    try:
+        # DBは訪問者ごとに分離済み。メールはexample.invalidのサンプルだけ。
+        matched = relink_demo_mail_data(connection, g.user["id"])
+        connection.commit()
+    finally:
+        connection.close()
+    return redirect(url_for("email_settings", sync="demo", count=matched))
+
+
+# =========================================================
 # メールアカウント設定
 # =========================================================
 
@@ -4851,6 +4959,9 @@ def google_oauth_callback():
     methods=["GET", "POST"],
 )
 def email_settings():
+    # 公開デモは画面閲覧と架空メールの再照合のみ。メールアカウント登録は禁止。
+    if DEMO_MODE and request.method != "GET":
+        abort(403)
     error = None
 
     provider_defaults = {
@@ -5165,6 +5276,7 @@ def email_settings():
         sync_event_count=sync_event_count,
         sync_error=sync_error,
         error=error,
+        demo_mail_count=(len(email_messages) if DEMO_MODE else None),
     )
 
 

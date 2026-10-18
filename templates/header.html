@@ -42,14 +42,12 @@
             カレンダー
         </a>
 
-        {% if not demo_mode %}
         <a
             href="{{ url_for('email_settings') }}"
             class="{% if request.endpoint in ['email_settings', 'toggle_email_account', 'delete_email_account'] %}active{% endif %}"
         >
             メール
         </a>
-        {% endif %}
 
     </nav>
 

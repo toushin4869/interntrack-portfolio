@@ -18,10 +18,15 @@
             <div>
                 <p class="page-label">EMAIL ACCOUNTS</p>
                 <h1>メールアカウント設定</h1>
-                <p>就活に使用するメールと、連携したアカウントから取得した最新メールを管理します。</p>
+                <p>{% if demo_mode %}Gmail・Outlookを模した架空メールを表示し、企業との自動紐付けを体験できます。{% else %}就活に使用するメールと、連携したアカウントから取得した最新メールを管理します。{% endif %}</p>
             </div>
 
             <div class="gmail-actions">
+                {% if demo_mode %}
+                <form method="POST" action="{{ url_for('demo_mail_relink') }}">
+                    <button type="submit" class="gmail-sync-button">サンプルメールを再照合</button>
+                </form>
+                {% else %}
                 <a href="{{ url_for('google_connect') }}" class="google-connect-button">
                     Googleアカウントと連携
                 </a>
@@ -43,10 +48,13 @@
                         Outlookメールを取得
                     </button>
                 </form>
+                {% endif %}
             </div>
         </section>
 
-        {% if sync_status == "success" %}
+        {% if demo_mode and sync_status == "demo" %}
+        <div class="sync-message success">架空メールの自動照合が完了しました。登録企業との紐付け：{{ sync_count }}件。</div>
+        {% elif sync_status == "success" %}
         <div class="sync-message success">
             メールを{{ sync_count }}件確認しました。
             {% if sync_event_count|int > 0 %}
@@ -67,16 +75,32 @@
 
         <section class="notice-card">
             <div>
+                {% if demo_mode %}
+                <strong>安全なポートフォリオデモ — 実際のメール接続は行いません</strong>
+                <p>表示される送信者・件名・本文はすべて架空のデータです。Gmail / Outlookの本物のOAuth認証、メール取得、アカウント登録は無効です。企業名の自動照合は実装済みの処理を使用します。</p>
+                {% else %}
                 <strong>Google / Microsoft OAuthで安全に連携します</strong>
-                <p>
-                    Gmail・Outlookのパスワードは保存しません。最新20件を読み取り、登録企業との照合と就活予定の自動抽出に使用します。
-                </p>
+                <p>Gmail・Outlookのパスワードは保存しません。最新20件を読み取り、登録企業との照合と就活予定の自動抽出に使用します。</p>
+                {% endif %}
             </div>
-            <span class="connection-count">連携中 {{ email_connected_count }}件</span>
+            <span class="connection-count">{{ "架空の2アカウント" if demo_mode else "連携中 " ~ email_connected_count ~ "件" }}</span>
         </section>
 
         <section class="settings-grid">
             <article class="settings-card">
+                {% if demo_mode %}
+                <div class="card-heading">
+                    <p class="card-label">HOW IT WORKS</p>
+                    <h2>メール自動整理のデモ</h2>
+                </div>
+                <div class="demo-instructions">
+                    <p>① 下のGmail / Outlookタブで架空メールを切り替えられます。</p>
+                    <p>② 件名・差出人などに企業名が含まれると、自動的に登録企業と紐付きます。</p>
+                    <p>③ 「登録企業のみ」を選ぶと紐付け済みメールだけを表示します。</p>
+                    <p>④ 「北斗ソリューションズ」を企業一覧に新規登録してから再照合すると、最初は未紐付けだったメールが自動で紐付きます。</p>
+                    <p class="demo-tip">※ サンプルメールは全て架空。実際のメールを接続することはできません。</p>
+                </div>
+                {% else %}
                 <div class="card-heading">
                     <p class="card-label">ADD ACCOUNT</p>
                     <h2>メールアドレスを追加</h2>
@@ -125,6 +149,7 @@
 
                     <button type="submit" class="primary-button">＋ アカウントを登録</button>
                 </form>
+                {% endif %}
             </article>
 
             <article class="settings-card account-list-card">
@@ -141,22 +166,26 @@
                         <div class="account-main">
                             <div class="account-title-row">
                                 <strong>{{ account["display_name"] or account["email_address"] }}</strong>
-                                {% if account["is_active"] %}
+                                {% if demo_mode %}
+                                <span class="status-badge active">サンプル</span>
+                                {% elif account["is_active"] %}
                                 <span class="status-badge active">有効</span>
                                 {% else %}
                                 <span class="status-badge disabled">無効</span>
                                 {% endif %}
-                                {% if account["oauth_connected"] %}
+                                {% if demo_mode %}
+                                <span class="status-badge connected">架空アカウント</span>
+                                {% elif account["oauth_connected"] %}
                                 <span class="status-badge connected">OAuth接続済み</span>
                                 {% endif %}
                             </div>
                             <p>{{ account["email_address"] }}</p>
                             <span class="provider-text">
-                                {{ account["provider"]|upper }}・{{ "OAuth" if account["auth_type"] == "oauth" else
-                                "IMAP" }}
+                                {% if demo_mode %}{{ account["provider"]|upper }}・架空データ（OAuth無効）{% else %}{{ account["provider"]|upper }}・{{ "OAuth" if account["auth_type"] == "oauth" else "IMAP" }}{% endif %}
                             </span>
                         </div>
 
+                        {% if not demo_mode %}
                         <div class="account-actions">
                             <form method="POST"
                                 action="{{ url_for('toggle_email_account', account_id=account['id']) }}">
@@ -169,6 +198,7 @@
                                 <button type="submit" class="danger-button">削除</button>
                             </form>
                         </div>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
@@ -188,7 +218,7 @@
                     <p class="card-label">LATEST EMAIL</p>
                     <h2>最新メール</h2>
                 </div>
-                <span>最大20件表示</span>
+                <span>{{ "架空メール・最大20件表示" if demo_mode else "最大20件表示" }}</span>
             </div>
             <div class="email-provider-tabs">
                 <a href="{{ url_for('email_settings', provider='all', company_only='1' if company_only else '0') }}"
@@ -231,7 +261,7 @@
 
             {% if company_only %}
             <p class="email-company-filter-note">
-                登録企業と紐付かないメールはInternTrack上で非表示になります。メール取得時は、登録企業のメールが20件に達するまで過去の受信メールもさかのぼって確認します（最大500件まで）。Gmail・Outlook本体のメールは削除されません。
+                {% if demo_mode %}現在登録されている架空企業と一致するサンプルメールだけを表示しています。架空の受信箱の内容は変更しません。{% else %}登録企業と紐付かないメールはInternTrack上で非表示になります。メール取得時は、登録企業のメールが20件に達するまで過去の受信メールもさかのぼって確認します（最大500件まで）。Gmail・Outlook本体のメールは削除されません。{% endif %}
             </p>
             {% endif %}
 
@@ -274,6 +304,7 @@
                                         ) }}" class="message-company-link">
                                 {{ message["company_name"] }}
                             </a>
+                            {% if demo_mode %}<span class="demo-matched-label">自動紐付け</span>{% endif %}
                             {% else %}
                             <span class="message-company-unmatched">
                                 未紐付け
@@ -291,7 +322,7 @@
                 <p>企業名を登録してからメールを再取得するか、「全メール」に切り替えて確認してください。</p>
                 {% else %}
                 <strong>まだメールを取得していません</strong>
-                <p>GoogleまたはMicrosoftアカウントを連携し、メール取得ボタンを押してください。</p>
+                <p>{% if demo_mode %}表示する架空メールがありません。{% else %}GoogleまたはMicrosoftアカウントを連携し、メール取得ボタンを押してください。{% endif %}</p>
                 {% endif %}
             </div>
             {% endif %}
@@ -325,8 +356,10 @@
             }
         }
 
-        providerSelect.addEventListener("change", updateProviderFields);
-        updateProviderFields();
+        if (providerSelect && imapFields && imapServer && imapPort) {
+            providerSelect.addEventListener("change", updateProviderFields);
+            updateProviderFields();
+        }
     </script>
 
 </body>
